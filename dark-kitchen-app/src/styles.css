@@ -1,9 +1,3 @@
-/* src/styles.css */
-
-/* Importação da Fonte */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* ─── TOKENS GLOBAIS (Acessíveis por todo o Angular) ─── */
 :root {
   --white:      #FFFFFF;
   --orange:     #E27E0C;
