@@ -30,12 +30,12 @@
         <span class="order-number">#1234</span>
       </div>
       <div class="header-logo">
-        <img src="" alt="Logo Dark Kiasdtchen" class="logo-img" />
+        <img src="" class="logo-img" alt="Logo" />
       </div>
       <div class="header-eta">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1.5"/><path d="M8 4.5V8l2.5 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div>
-          <span class="eta-label" style="color: #FFF3E0;">Tempo estimado</span>
+          <span class="eta-label" style="color: #FFF3E0;">Tempos estimado</span>
           <span class="eta-value" id="etaDisplay" style="color: #fff;">19:30 min</span>
         </div>
       </div>
@@ -131,7 +131,7 @@
           <div class="vtl-connector"></div>
           <div class="vtl-content">
             <p class="vtl-title">Retirado pelo motoboy</p>
-            <p class="vtl-time">—</p>
+            <p class="vtl-time">...</p>
           </div>
         </div>
 
@@ -141,7 +141,7 @@
           </div>
           <div class="vtl-content">
             <p class="vtl-title">Pedido entregue</p>
-            <p class="vtl-time">—</p>
+            <p class="vtl-time">...</p>
           </div>
         </div>
 
@@ -180,7 +180,7 @@
           <h3 class="address-title-new">Endereço de Entrega</h3>
           
           <div class="address-content-new" id="addressContent">
-            <p class="address-street">Rua Tiradentes, 67</p>
+            <p class="address-street" style="font-size: 10px; font-weight: bold;">Ruas Tiradentes, 67</p>
             <p class="address-obs">Bairro 1</p>
             <p class="address-details">São Paulo - Zona Sul</p>
             <p class="address-cep">CEP 13065-769</p>
@@ -198,9 +198,13 @@
           </div>
         </div>
 
-        <button class="card-edit-btn-new" id="editAddressBtn">
-          Editar Endereço
-        </button>
+        <button class="card-edit-btn-new" (click)="toggleAddressEdit()" id="editAddressBtn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+  </svg>
+  Editar Endereço
+</button>
         
       </div>
 
