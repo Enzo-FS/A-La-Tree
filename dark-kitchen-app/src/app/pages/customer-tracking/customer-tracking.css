@@ -1,0 +1,677 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ─── TOKENS ─────────────────────────────────── */
+:root {
+  --white:      #FFFFFF;
+  --orange:     #E27E0C;
+  --orange-lite:#FFF3E0;
+  --orange-dark:#B85F00;
+  --gray:       #ECECEC;
+  --gray-mid:   #C4C4C4;
+  --gray-dark:  #6B6B6B;
+  --text:       #1A1A1A;
+  --text-soft:  #555;
+  --surface:    #F8F8F8;
+  --card:       #FFFFFF;
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.06);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.10);
+  --header-h:   64px;
+  --stepper-h:  64px;
+  --nav-h:      68px;
+  --font-body:  'Inter', sans-serif;
+  --font-display:'Inter', sans-serif;
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ─── RESET ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+:host {
+  display: block; /* Essencial para o Angular reconhecer a largura */
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--text);
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: hidden;
+}
+
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input  { font-family: inherit; }
+
+/* ─── HEADER ─────────────────────────────────── */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--header-h);
+  background: var(--orange); /* Alterado para Laranja */
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.header-order {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.order-label { 
+  font-size: 12px;          /* Ajustado para 12px */
+  color: #FFF3E0; 
+  font-weight: 500;         /* Medium */
+  letter-spacing: .06em; 
+  text-transform: uppercase; 
+}
+.order-number { 
+  font-family: var(--font-display); 
+  font-size: 12px;          /* Ajustado para 12px */
+  color: var(--white); 
+  font-weight: 800;         /* Black / Extra-Bold (peso máximo carregado da fonte Syne) */
+  letter-spacing: -.02em; 
+}
+
+.logo-img {
+  padding: 10px;
+  width: auto;
+  display: block;
+  background-color: white;
+  border-radius: 40px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-text { font-family: var(--font-display); font-size: 17px; color: var(--white); font-weight: 800; letter-spacing: -.03em; }
+
+.header-eta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.header-eta > div { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2; }
+.eta-label { font-size: 9px; color: var(--gray-mid); text-transform: uppercase; letter-spacing: .06em; }
+.eta-value  { font-size: 13px; font-weight: 700; color: var(--orange); }
+
+
+/* ─── STEPPER BAR ────────────────────────────── */
+.stepper-bar {
+  position: fixed;
+  top: var(--header-h);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--stepper-h);
+  background: var(--white);
+  z-index: 99;
+  border-bottom: 1.5px solid var(--gray);
+  display: flex;
+  justify-content: center;
+}
+
+.stepper-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 6px;
+  padding: 0 16px;
+  width: 100%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 70px;
+}
+
+/* Retângulo com as medidas e cor cinza solicitadas */
+.step-rect {
+  width: 70px;
+  height: 7px;
+  background: #DFDFDF;
+  border-radius: 4px; /* Bordas levemente arredondadas para um visual moderno */
+  transition: background 0.3s ease;
+}
+
+/* Muda para Laranja ao atingir a etapa */
+.step.active .step-rect, 
+.step.current .step-rect { 
+  background: var(--orange); 
+}
+
+
+.step span {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--orange);
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  
+
+  visibility: hidden; 
+}
+
+.step.current span {
+  visibility: visible;
+}
+/* Deixa o texto das etapas futuras sutilmente cinza para indicar que não chegou ainda (opcional, melhora a experiência) */
+.step:not(.active):not(.current) span {
+  color: #A0A0A0;
+}
+
+/* ─── MAIN CONTENT ───────────────────────────── */
+.main-content {
+  padding-top: calc(var(--header-h) + var(--stepper-h) + 16px);
+  padding-bottom: calc(var(--nav-h) + 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section {
+  background: var(--card);
+  margin: 0 12px;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.02em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-dark);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: blink 1.2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ─── MAPA COLADO NO HEADER ──────────────────── */
+.map-container-fixed {
+  position: fixed;
+  top: var(--header-h); /* Posiciona exatamente onde o Header termina (64px) */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: 147.96px;
+  display: flex;
+  justify-content: center;
+  z-index: 99;
+  background: transparent; /* Remove qualquer fundo branco ao redor */
+}
+
+.map-animated-img {
+  width: 375.85px;
+  height: 147.96px;
+  object-fit: cover;
+  border-radius: 0; /* Totalmenste retangular */
+}
+
+
+/* ─── VISUAL TIMELINE ────────────────────────── */
+.visual-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.vtl-item {
+  display: grid;
+  grid-template-columns: 44px 2px 1fr;
+  gap: 0 10px;
+  align-items: start;
+}
+.vtl-item.last { grid-template-columns: 44px 1fr; }
+.vtl-item.last .vtl-content { grid-column: 2; }
+
+.vtl-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-mid);
+  flex-shrink: 0;
+  transition: all .3s;
+  z-index: 1;
+}
+.vtl-item.done .vtl-icon   { background: var(--orange-lite); color: var(--orange); }
+.vtl-item.active .vtl-icon { background: var(--orange); color: var(--white); box-shadow: 0 4px 14px rgba(226,126,12,.4); }
+
+.vtl-connector {
+  width: 2px;
+  min-height: 32px;
+  background: var(--gray);
+  margin: 0 auto;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.vtl-connector.done { background: var(--orange); }
+
+.vtl-content {
+  padding: 10px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vtl-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.vtl-item:not(.done):not(.active) .vtl-title { color: var(--gray-mid); }
+.vtl-time  { font-size: 11px; color: var(--gray-dark); }
+
+/* ─── CONTAINER MOTOBOY E ENDEREÇO REFORMULADO ─── */
+.driver-address-container-new {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 12px;
+  background: transparent;
+}
+
+/* ─── RETÂNGULO 1: MOTORISTA (ESQUERDA) ─── */
+.card-driver-new {
+  width: 200px;
+  height: 180px;
+  background: var(--white);
+  border-radius: 10px; /* Borda Radius 10 */
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.driver-header-orange {
+  width: 100%;
+  height: 27px;              /* Mantém a altura de 27px */
+  background: #E27E0C;
+  
+  /* Formatação solicitada */
+  font-size: 10px;           /* Fonte 10 */
+  font-weight: bold;         /* Bold */
+  color: var(--white);       /* Cor Branca */
+  text-align: center;        /* Texto centralizado */
+  
+  /* Alinhamento perfeito ao centro da barra de 27px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.driver-body-new {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.driver-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.driver-avatar-mini {
+  width: 22px;
+  height: 22px;
+  background: var(--orange-lite);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.driver-name-new {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.driver-divider {
+  border: none;
+  border-top: 1px solid var(--gray);
+  margin: 6px 0;
+}
+
+.driver-details-new {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Centralizada à esquerda */
+  text-align: left;
+}
+
+.detail-label {
+  font-size: 8px;
+  font-weight: 600; /* Semi Bold */
+  color: var(--gray-dark);
+  margin-bottom: 1px;
+}
+
+.detail-value {
+  font-size: 8px;
+  font-weight: 500; /* Medium */
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+/* ─── COLUNA DIREITA (RETÂNGULOS 2 E 3) ─── */
+.column-right-new {
+  display: flex;
+  flex-direction: column;
+  gap: 7px; /* Alinha perfeitamente a altura combinada com o lado esquerdo */
+}
+
+/* RETÂNGULO 2: CARD ENDEREÇO */
+.card-address-new {
+  width: 200px;
+  height: 130px; /* Width 159, Height 117 */
+  background: var(--white);
+  border-radius: 10px; /* Borda Radius 10 */
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.35);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.address-title-new {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: bold;
+  color: #E27E0C; /* Cor #E27E0C */
+  text-align: center; /* Centralizada */
+  margin-bottom: 12px;
+}
+
+.address-content-new {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 4px; /* Gera o espaçamento proporcional interno de 20px com o header */
+}
+
+.address-content-new p {
+  font-size: 8px;
+  color: var(--text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+/* RETÂNGULO 3: BOTÃO EDITAR */
+.card-edit-btn-new {
+  width: 200px;
+  height: 44px; /* Width 159, Height 37 */
+  background: var(--white);
+  border-radius: 10px; /* Borda Radius 10 */
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--gray);
+  color: var(--orange);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.card-edit-btn-new:active {
+  background: var(--orange-lite);
+}
+
+/* Suporte à edição interna miniaturizada */
+.address-edit-form-new {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  right: 10px;
+  background: white;
+  z-index: 2;
+}
+.address-edit-form-new.hidden { display: none; }
+.address-edit-form-new input {
+  font-size: 8px;
+  padding: 2px 4px;
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  outline: none;
+}
+.form-actions-new {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 2px;
+}
+.btn-action-mini {
+  font-size: 8px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+.btn-action-mini.cancel { background: var(--gray); color: var(--gray-dark); }
+.btn-action-mini.save { background: var(--orange); color: white; }
+
+/* ─── CONFIRM BUTTON REFORMULADO ──────────────── */
+.confirm-section-clear {
+  margin: 0 12px;
+  padding: 4px 8px;        /* Espaçamento sutil nas laterais e topo */
+  background: transparent; /* Remove o fundo branco */
+  box-shadow: none;        /* Remove o sombreado do card traseiro */
+}
+
+.btn-confirm {
+  width: 100%;
+  padding: 16px;
+  background: var(--orange);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: transform .15s var(--ease-spring), box-shadow .15s;
+}
+.btn-confirm:active { transform: scale(.97); box-shadow: 0 2px 8px rgba(226,126,12,.25); }
+.btn-confirm.confirmed { background: #22c55e; box-shadow: 0 6px 20px rgba(34,197,94,.3); }
+/* ─── ORDER SUMMARY ──────────────────────────── */
+.order-items { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.order-item  { display: flex; align-items: center; gap: 8px; }
+.item-qty    { font-size: 12px; font-weight: 700; color: var(--orange); background: var(--orange-lite); border-radius: 6px; padding: 2px 6px; flex-shrink: 0; }
+.item-name   { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); }
+.item-price  { font-size: 14px; font-weight: 700; color: var(--text); }
+
+.order-totals { border-top: 1.5px solid var(--gray); padding-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.total-row    { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-soft); }
+.total-row.grand { font-weight: 700; font-size: 16px; color: var(--text); border-top: 1.5px solid var(--gray); padding-top: 10px; margin-top: 4px; }
+
+.payment-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--orange-lite);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange-dark);
+}
+
+/* ─── SUPPORT ────────────────────────────────── */
+.support-actions { display: flex; flex-direction: column; gap: 10px; }
+.btn-support {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--orange);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform .15s var(--ease-spring);
+}
+.btn-support:active { transform: scale(.97); }
+
+/* ─── BOTTOM NAV ─────────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--nav-h);
+  background: var(--white);
+  border-top: 1.5px solid var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 100;
+  padding: 0 8px 8px;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 12px;
+  color: var(--gray-mid);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  transition: color .15s;
+}
+.nav-item.active { color: var(--orange); }
+.nav-item.center-nav { padding: 0; }
+
+/* ─── SHARED BUTTON ──────────────────────────── */
+.btn-primary.small {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  background: var(--orange);
+  transition: opacity .2s;
+}
+.btn-primary.small:active { opacity: .8; }
+
+/* ─── TOAST ──────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity .25s, transform .25s var(--ease-spring);
+  pointer-events: none;
+  z-index: 200;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+
+/* ─── STATUS VISUAL ESPECÍFICO ───────────────── */
+/* Sombreamento mais intenso ao fundo branco desta seção */
+.status-visual-section {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  margin-top: 16px;
+}
+
+/* Novo título laranja com fonte 12px, bold e 6% de espaçamento */
+.status-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--orange); /* #E27E0C */
+  letter-spacing: 0.06em; /* 6% */
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+/* Lacuna para receber as imagens do seu computador */
+.order-images-placeholder {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px; /* Espaço entre as imagens e a linha do tempo */
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+/* Estilo automático para as imagens quando você as inserir no HTML */
+.order-images-placeholder img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--gray);
+}

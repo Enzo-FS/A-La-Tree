@@ -1,0 +1,44 @@
+/* src/styles.css */
+
+/* Importação da Fonte */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ─── TOKENS GLOBAIS (Acessíveis por todo o Angular) ─── */
+:root {
+  --white:      #FFFFFF;
+  --orange:     #E27E0C;
+  --orange-lite:#FFF3E0;
+  --orange-dark:#B85F00;
+  --gray:       #ECECEC;
+  --gray-mid:   #C4C4C4;
+  --gray-dark:  #6B6B6B;
+  --text:       #1A1A1A;
+  --text-soft:  #555;
+  --surface:    #F8F8F8;
+  --card:       #FFFFFF;
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.06);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.10);
+  --header-h:   64px;
+  --stepper-h:  64px;
+  --nav-h:      68px;
+  --font-body:  'Inter', sans-serif;
+  --font-display:'Inter', sans-serif;
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+/* Reset Global */
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+/* Fundo da tela do computador */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #E5E5E5; /* Cinza para destacar a tela do app */
+}
