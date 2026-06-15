@@ -148,4 +148,11 @@
     </div>
   </section>
 
+  <div class="test-form" style="padding: 20px; background: #222; color: #fff; border-radius: 8px; margin-bottom: 20px;">
+  <h3 style="margin-bottom: 10px;">Cadastrar Produto Teste</h3>
+  <input #nome type="text" placeholder="Nome do Lanche" style="display:block; margin-bottom: 5px;">
+  <input #preco type="number" placeholder="Preço" style="display:block; margin-bottom: 5px;">
+  <button (click)="cadastrarLanche(nome.value, preco.value)" class="btn-action btn-success">Salvar no Firebase</button>
+  </div>
+
 </main>

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, collectionData, addDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
+
 // 1. Moldes dos nossos dados (Interfaces)
 export interface Motoboy {
   id?: string;
@@ -60,3 +61,4 @@ export class DatabaseService {
     return addDoc(this.cardapioCollection, produto);
   }
 }
+
