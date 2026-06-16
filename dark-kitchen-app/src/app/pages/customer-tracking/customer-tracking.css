@@ -24,6 +24,64 @@
   --ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
 
+/* --- ESTILOS DA SEÇÃO DE SUPORTE --- */
+.support-section { 
+    margin-top: 30px; 
+    padding-bottom: 40px; 
+    border-top: 1px solid #E5E7EB; 
+    padding-top: 20px;
+}
+
+.support-actions { 
+    display: flex; 
+    gap: 12px; 
+    margin-top: 15px; 
+}
+
+/* Botão Primário (Falar com Entregador) */
+.btn-support-primary {
+    flex: 1;
+    padding: 14px 10px;
+    border: none;
+    border-radius: 8px;
+    background: #E27E0C;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-support-primary:hover {
+    background: #c66f0a;
+}
+
+/* Botão Secundário (Falar com Loja) */
+.btn-support-secondary {
+    flex: 1;
+    padding: 14px 10px;
+    border: 2px solid #E27E0C;
+    border-radius: 8px;
+    background: transparent;
+    color: #E27E0C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-support-secondary:hover {
+    background: #fff3e6;
+}
+
 /* ─── RESET ──────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; scroll-behavior: smooth; }
