@@ -24,6 +24,95 @@
   --ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
 
+/* Container principal da animação (CORRIGIDO) */
+.conceptual-map {
+  position: fixed; /* Volta a fixar o elemento na tela */
+  top: 64px; /* Empurra exatamente para baixo do seu header */
+  left: 0;
+  width: 100%; /* Garante que ocupe a tela toda de ponta a ponta */
+  height: 120px; /* Reduzi levemente a altura para encaixar melhor */
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  overflow: hidden;
+  z-index: 40; /* Garante que fique acima do conteúdo principal */
+  border-bottom: 1px solid #E5E7EB; /* Linha bem sutil para separar do stepper/conteúdo */
+}
+
+/* Estilo da linha tracejada (a rua) */
+.map-track {
+  position: absolute;
+  top: 45%;
+  left: 50px;
+  right: 50px;
+  height: 2px;
+  background-image: linear-gradient(to right, #D1D5DB 50%, transparent 50%);
+  background-size: 12px 2px;
+  background-repeat: repeat-x;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* Os pontos (Loja e Casa) */
+.map-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  background: #FFFFFF; /* Fundo branco para esconder a linha atrás deles */
+  padding: 0 10px;
+}
+
+/* Círculos coloridos dos ícones */
+.icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.icon-circle.store {
+  background-color: #FFF3E0;
+  color: #E27E0C;
+}
+.icon-circle.house {
+  background-color: #F3F4F6;
+  color: #4B5563;
+}
+
+/* Textos embaixo dos ícones */
+.point-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4B5563;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* A Moto que vai se mexer */
+.map-moto {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 3;
+  background: #FFFFFF;
+  padding: 0 8px;
+  /* Chama a animação que criamos abaixo */
+  animation: driveDelivery 5s linear infinite; 
+}
+
+/* O "motor" da animação */
+@keyframes driveDelivery {
+  0% { left: 15%; opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: 75%; opacity: 0; }
+}
+
 /* --- ESTILOS DA SEÇÃO DE SUPORTE --- */
 .support-section { 
     margin-top: 30px; 
@@ -175,7 +264,7 @@ input  { font-family: inherit; }
 /* ─── STEPPER BAR ────────────────────────────── */
 .stepper-bar {
   position: fixed;
-  top: var(--header-h);
+  top: calc(var(--header-h) + 120px); 
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -245,7 +334,7 @@ input  { font-family: inherit; }
 
 /* ─── MAIN CONTENT ───────────────────────────── */
 .main-content {
-  padding-top: calc(var(--header-h) + var(--stepper-h) + 16px);
+  padding-top: calc(var(--header-h) + 120px + var(--stepper-h) + 16px);
   padding-bottom: calc(var(--nav-h) + 16px);
   display: flex;
   flex-direction: column;

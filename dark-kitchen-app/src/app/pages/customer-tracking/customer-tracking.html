@@ -19,17 +19,8 @@
   </div>
 </header>
 
-<div class="map-container-fixed">
-  <iframe 
-    [src]="mapaInterativoUrl" 
-    width="100%" 
-    height="100%" 
-    style="border:0;" 
-    allowfullscreen="" 
-    loading="lazy" 
-    referrerpolicy="no-referrer-when-downgrade">
-  </iframe>
-</div>
+<div class="custom-placeholder">
+  </div>
 
 <div class="stepper-bar" id="stepperBar">
   <div class="stepper-track">
@@ -42,7 +33,7 @@
 </div>
 
 <main class="main-content">
-  <section class="section status-visual-section" style="margin-top: 140px;">
+  <section class="section status-visual-section">
     <h2 class="status-title">Status do Pedido</h2>
     <div class="visual-timeline">
       <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 0" [class.active]="pedido.status === 'recebidos'">
@@ -107,12 +98,18 @@
       <div class="card-address-new">
   <h3 class="address-title-new" style="color: #111827;">Endereço de Entrega</h3>
   
-  <div class="address-content-new" id="addressContent" [class.hidden]="addressEditMode">
-    <p style="font-size: 11px; font-weight: bold; color: #111827;">{{ pedido.rua }}, {{ pedido.numero }}</p>
-    <p style="font-size: 10px; color: #4B5563;">{{ pedido.bairro }}</p>
-    <p style="font-size: 10px; color: #4B5563;">Região: {{ pedido.regiao }}</p>
-    <p style="font-size: 10px; color: #4B5563;">CEP: {{ pedido.cep }}</p>
-    <p style="font-size: 10px; color: #E27E0C; font-style: italic; margin-top: 4px;">Obs: {{ pedido.obs }}</p>
+ <div class="address-content-new" id="addressContent" [class.hidden]="addressEditMode">
+    @if (pedido?.rua) {
+      <p style="font-size: 11px; font-weight: bold; color: #111827;">{{ pedido.rua }}, {{ pedido.numero }}</p>
+      <p style="font-size: 10px; color: #4B5563;">{{ pedido.bairro }}</p>
+      <p style="font-size: 10px; color: #4B5563;">Região: {{ pedido.regiao }}</p>
+      <p style="font-size: 10px; color: #4B5563;">CEP: {{ pedido.cep }}</p>
+      @if (pedido.obs) {
+        <p style="font-size: 10px; color: #E27E0C; font-style: italic; margin-top: 4px;">Obs: {{ pedido.obs }}</p>
+      }
+    } @else {
+      <p style="font-size: 11px; font-weight: 600; color: #6B7280; font-style: italic;">Aguardando dados...</p>
+    }
   </div>
 
   <div class="address-edit-form-new" [class.hidden]="!addressEditMode" id="addressForm">
