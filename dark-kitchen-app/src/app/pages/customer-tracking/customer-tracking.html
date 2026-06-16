@@ -142,7 +142,7 @@
         </button>
       } @else {
         <div style="text-align: center; background: #F3F4F6; padding: 10px; border-radius: 8px; border: 1px dashed #D1D5DB;">
-          <span style="font-size: 9px; color: #6B7280; font-weight: bold; text-transform: uppercase;">Bloqueado: Em Rota</span>
+          <span style="font-size: 9px; color: #6B7280; font-weight: bold; text-transform: uppercase;">Bloqueado: Em Rota/Entregue</span>
         </div>
       }
     </div>
@@ -163,7 +163,9 @@
       <li class="order-item"><span class="item-qty">2x</span><span class="item-name">Salada de Lanches</span><span class="item-price">R$ 90,00</span></li>
       <li class="order-item"><span class="item-qty">1x</span><span class="item-name">Feijão Tropeiro</span><span class="item-price">R$ 45,00</span></li>
     </ul>
+    
     <div class="order-totals">
+      <p style="font-size: 12px; font-weight: bold;">Pagamento via: PIX</p>
       <div class="total-row grand"><span>Total</span><span>R$ {{ pedido?.total || '187,00' }}</span></div>
     </div>
   </section>
