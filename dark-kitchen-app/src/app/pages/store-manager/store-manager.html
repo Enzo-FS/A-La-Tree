@@ -8,7 +8,12 @@
 </header>
 
 <main class="store-main">
-  <h1 class="page-title">Central de Gerenciamento</h1>
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px;">
+  <h1 class="page-title" style="margin: 0;">Central de Gerenciamento</h1>
+  <button (click)="resetarTeste()" style="background: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #dc2626; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2); transition: transform 0.1s;">
+    🔄 Resetar Teste
+  </button>
+</div>
 
   <nav class="status-tabs">
     <button class="tab-btn" [class.active]="currentTab === 'recebidos'" (click)="setTab('recebidos')">Recebidos</button>

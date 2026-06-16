@@ -1,275 +1,213 @@
-<!-- HEADER FIXO -->
-  <header class="app-header">
-    <div class="header-inner">
-      
-      <div class="header-order">
-        <span class="order-label">Pedido</span>
-        <span class="order-number">#1234</span>
-      </div>
-      
-      <div class="header-logo">
-        <h1></h1>
-      </div>
-      
-      <div class="header-eta">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1.5"/><path d="M8 4.5V8l2.5 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div>
-          <span class="eta-label" style="color: #FFF3E0;">Tempo estimado</span>
-          <span class="eta-value" id="etaDisplay" style="color: #fff;">19:30 min</span>
-        </div>
-      </div>
-      
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-order">
+      <span class="order-label">Pedido</span>
+      <span class="order-number">#{{ pedido?.id || '1234' }}</span>
     </div>
-  </header>
-
-  <!-- STEPPER FIXO -->
-  <header class="app-header">
-    <div class="header-inner">
-      <div class="header-order">
-        <span class="order-label">Pedido</span>
-        <span class="order-number">#1234</span>
-      </div>
-      <div class="header-logo">
-        <img src="https://i.imgur.com/nKQluiG.png" class="logo-img" alt="Logo" />
-      </div>
-      <div class="header-eta">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1.5"/><path d="M8 4.5V8l2.5 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div>
-          <span class="eta-label" style="color: #FFF3E0;">Tempos estimado</span>
-          <span class="eta-value" id="etaDisplay" style="color: #fff;">19:30 min</span>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="map-container-fixed">
-    <img src="C:\Users\spill\Desktop\Projeto Dark Kitchen Final\src\mapa-animado.gif" alt="Animação do trajeto" class="map-animated-img" />
-  </div>
-
-  <div class="stepper-bar" id="stepperBar">
-    <div class="stepper-track">
-      <div class="step active" data-step="0">
-        <div class="step-rect"></div>
-        <span>Confirmado</span>
-      </div>
-      <div class="step active" data-step="1">
-        <div class="step-rect"></div>
-        <span>Preparando</span>
-      </div>
-      <div class="step current" data-step="2">
-        <div class="step-rect"></div>
-        <span>Pronto</span>
-      </div>
-      <div class="step" data-step="3">
-        <div class="step-rect"></div>
-        <span>Motoboy</span>
-      </div>
-      <div class="step" data-step="4">
-        <div class="step-rect"></div>
-        <span>Entregue</span>
-      </div>
-    </div>
-  </div>
-
-  <main class="main-content">
-
-   
-<section class="map-section-full">
-      
-      <div class="map-image-container">
-        <img src="C:\Users\spill\Desktop\Projeto Dark Kitchen Final\src\mapa-animado.gif" alt="Animação do trajeto" class="map-animated-img" />
-      </div>
-    </section>
-
     
-<!--statuspedido2-->
-   <section class="section status-visual-section">
-      <h2 class="status-title">Status do Pedido</h2>
-      
-      <div class="order-images-placeholder">
-        </div>
-
-      <div class="visual-timeline">
-
-        <div class="vtl-item done">
-          <div class="vtl-icon">
-            <svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 11l5 5L18 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-          </div>
-          <div class="vtl-connector done"></div>
-          <div class="vtl-content">
-            <p class="vtl-title">Aguardando confirmação</p>
-            <p class="vtl-time">14:20</p>
-          </div>
-        </div>
-
-        <div class="vtl-item done">
-          <div class="vtl-icon">
-            <svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 5v6l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-          </div>
-          <div class="vtl-connector done"></div>
-          <div class="vtl-content">
-            <p class="vtl-title">Preparando</p>
-            <p class="vtl-time">14:25</p>
-          </div>
-        </div>
-
-        <div class="vtl-item active">
-          <div class="vtl-icon">
-            <svg width="22" height="22" viewBox="0 0 22 22"><rect x="5" y="11" width="12" height="7" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 11V8.5a3 3 0 016 0V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-          </div>
-          <div class="vtl-connector"></div>
-          <div class="vtl-content">
-            <p class="vtl-title">Pedido pronto</p>
-            <p class="vtl-time">Agora</p>
-          </div>
-        </div>
-
-        <div class="vtl-item">
-          <div class="vtl-icon">
-            <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="7" cy="16" r="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="15" cy="16" r="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3 8h9l3 5H3V8z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M12 8l3.5 3H18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
-          </div>
-          <div class="vtl-connector"></div>
-          <div class="vtl-content">
-            <p class="vtl-title">Retirado pelo motoboy</p>
-            <p class="vtl-time">...</p>
-          </div>
-        </div>
-
-        <div class="vtl-item last">
-          <div class="vtl-icon">
-            <svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 18c0-3.5 2.5-5.5 8-5.5s8 2 8 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="11" cy="7" r="4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-          </div>
-          <div class="vtl-content">
-            <p class="vtl-title">Pedido entregue</p>
-            <p class="vtl-time">...</p>
-          </div>
-        </div>
-
+    <div class="header-logo">
+      <img src="https://i.imgur.com/nKQluiG.png" class="logo-img" alt="Logo" style="width: 32px; height: 32px;" />
+    </div>
+    
+    <div class="header-eta">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1.5"/><path d="M8 4.5V8l2.5 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <span class="eta-label" style="color: #FFF3E0;">Tempo estimado</span>
+        <span class="eta-value" id="etaDisplay" style="color: #fff;">{{ etaText }}</span>
       </div>
-    </section>
+    </div>
+  </div>
+</header>
 
+<div class="map-container-fixed">
+  <img src="https://i.imgur.com/vH1N31r.gif" alt="Animação do trajeto" class="map-animated-img" style="width: 100%; height: 100%; object-fit: cover;" />
+</div>
 
-    <section class="driver-address-container-new">
+<div class="stepper-bar" id="stepperBar">
+  <div class="stepper-track">
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 0" [class.current]="pedido.status === 'recebidos'">
+      <div class="step-rect"></div><span>Confirmado</span>
+    </div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 1" [class.current]="pedido.status === 'preparacao'">
+      <div class="step-rect"></div><span>Preparando</span>
+    </div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 2" [class.current]="pedido.status === 'prontos'">
+      <div class="step-rect"></div><span>Pronto</span>
+    </div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 3" [class.current]="pedido.status === 'caminho'">
+      <div class="step-rect"></div><span>Motoboy</span>
+    </div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 4" [class.current]="pedido.status === 'entregues'">
+      <div class="step-rect"></div><span>Entregue</span>
+    </div>
+  </div>
+</div>
+
+<main class="main-content">
+  
+  <section class="section status-visual-section" style="margin-top: 140px;">
+    <h2 class="status-title">Status do Pedido</h2>
+    
+    <div class="order-images-placeholder">
+      </div>
+
+    <div class="visual-timeline">
+      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 0" [class.active]="pedido.status === 'recebidos'">
+        <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 11l5 5L18 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 0"></div>
+        <div class="vtl-content"><p class="vtl-title">Aguardando confirmação</p></div>
+      </div>
+
+      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 1" [class.active]="pedido.status === 'preparacao'">
+        <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 5v6l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 1"></div>
+        <div class="vtl-content"><p class="vtl-title">Preparando</p></div>
+      </div>
+
+      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 2" [class.active]="pedido.status === 'prontos'">
+        <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><rect x="5" y="11" width="12" height="7" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 11V8.5a3 3 0 016 0V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 2"></div>
+        <div class="vtl-content"><p class="vtl-title">Pedido pronto</p></div>
+      </div>
+
+      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 3" [class.active]="pedido.status === 'caminho'">
+        <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="7" cy="16" r="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="15" cy="16" r="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3 8h9l3 5H3V8z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M12 8l3.5 3H18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 3"></div>
+        <div class="vtl-content"><p class="vtl-title">Retirado pelo motoboy</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="driver-address-container-new">
+    
+    <div class="card-driver-new" style="border: 1px solid #E5E7EB; box-shadow: 0 4px 12px rgba(0,0,0,0.05); background: #FFFFFF; border-radius: 12px;">
       
-      <div class="card-driver-new">
-        <div class="driver-header-orange">Código de Entrega: 3577</div>
+      <div style="background: #E27E0C; color: #FFFFFF; font-size: 10px; font-weight: 600; text-align: center; padding: 6px 0; text-transform: uppercase; letter-spacing: 0.05em;">
+        Código de Entrega: 3577
+      </div>
+
+      <div class="driver-body-new" style="padding: 12px;">
         
-        <div class="driver-body-new">
-          <div class="driver-profile-row">
-            <div class="driver-avatar-mini">
-              <svg width="18" height="18" viewBox="0 0 32 32"><circle cx="16" cy="12" r="7" fill="#E27E0C" opacity=".2"/><path d="M5 28c0-5 4.5-8 11-8s11 3 11 8" stroke="#E27E0C" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="16" cy="12" r="5" stroke="#E27E0C" stroke-width="2" fill="none"/></svg>
-            </div>
-            <span class="driver-name-new">Thiago S. B.</span>
+        <div class="driver-profile-row" style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #E5E7EB;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
           </div>
           
-          <hr class="driver-divider" />
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 13px; font-weight: 800; color: #111827;">
+              @if (pedido.motoboyDados) {
+                {{ pedido.motoboyDados.nome }}
+              } @else {
+                Aguardando...
+              }
+            </span>
+            <span style="font-size: 9px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.04em;">Entregador Parceiro</span>
+          </div>
+        </div>
+        
+        <hr style="border: none; border-top: 1px dashed #E5E7EB; margin: 12px 0;" />
+        
+        <div class="driver-details-new" style="display: flex; flex-direction: column; gap: 8px;">
           
-          <div class="driver-details-new">
-            <span class="detail-label">Modelo do veículo</span>
-            <span class="detail-value">CG Titan 160cc</span>
+          @if (pedido.motoboyDados) {
+            <div style="display: flex; justify-content: space-between; align-items: center; ;">
+              <span style="font-size: 10px; color: #6B7280;">Veículo:</span>
+              <span style="font-size: 10px; color: #111827; font-weight: 600;">{{ pedido.motoboyDados.modeloMoto }}</span>
+            </div>
             
-            <span class="detail-label">Placa</span>
-            <span class="detail-value">RJK-A182</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="column-right-new">
-        
-        <div class="card-address-new">
-          <h3 class="address-title-new">Endereço de Entrega</h3>
-          
-          <div class="address-content-new" id="addressContent">
-            <p class="address-street" style="font-size: 10px; font-weight: bold;">Ruas Tiradentes, 67</p>
-            <p class="address-obs">Bairro 1</p>
-            <p class="address-details">São Paulo - Zona Sul</p>
-            <p class="address-cep">CEP 13065-769</p>
-          </div>
-
-          <div class="address-edit-form-new hidden" id="addressForm">
-            <input type="text" id="inputStreet" value="Rua Tiradentes, 67" />
-            <input type="text" id="inputNeighborhood" value="Bairro 1" />
-            <input type="text" id="inputCity" value="São Paulo - Zona Sul" />
-            <input type="text" id="inputCep" value="13065-769" />
-            <div class="form-actions-new">
-              <button class="btn-action-mini cancel" id="cancelEdit">X</button>
-              <button class="btn-action-mini save" id="saveAddress">✓</button>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 10px; color: #6B7280;">Placa:</span>
+              <span style="font-size: 10px; background: #F3F4F6; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: 700; color: #111827; border: 1px solid #D1D5DB;">{{ pedido.motoboyDados.placa }}</span>
             </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <span style="font-size: 10px; color: #6B7280;">Status:</span>
+              <span style="font-size: 10px; color: #059669; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                <span ></span>
+                Em trânsito
+              </span>
+            </div>
+          } @else {
+            <div style="text-align: center; padding: 10px 0;">
+              <span style="font-size: 11px; color: #6B7280;">Loja preparando o pedido. Nenhum veículo atribuído ainda.</span>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+    
+    <div class="column-right-new">
+      <div class="card-address-new">
+        <h3 class="address-title-new" style="color: #111827;">Endereço</h3>
+        <div class="address-content-new" id="addressContent">
+          <p class="address-street" style="font-size: 11px; font-weight: bold; color: #111827;">Rua Tiradentes, 67</p>
+          <p class="address-obs" style="font-size: 10px; color: #4B5563;">Bairro 1</p>
+          <p class="address-details" style="font-size: 10px; color: #4B5563;">São Paulo - Zona Sul</p>
+          <p class="address-cep" style="font-size: 10px; color: #9CA3AF;">CEP 13065-769</p>
+        </div>
+
+        <div class="address-edit-form-new" [class.hidden]="!addressEditMode" id="addressForm">
+          <input type="text" id="inputStreet" value="Rua Tiradentes, 67" />
+          <input type="text" id="inputNeighborhood" value="Bairro 1" />
+          <input type="text" id="inputCity" value="São Paulo - Zona Sul" />
+          <input type="text" id="inputCep" value="13065-769" />
+          <div class="form-actions-new">
+            <button class="btn-action-mini cancel" (click)="toggleAddressEdit()">X</button>
+            <button class="btn-action-mini save" (click)="saveAddress()">✓</button>
           </div>
         </div>
-
-        <button class="card-edit-btn-new" (click)="toggleAddressEdit()" id="editAddressBtn">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-  </svg>
-  Editar Endereço
-</button>
-        
       </div>
 
-    </section>
-
-
-   <section class="confirm-section-clear">
-      <button class="btn-confirm" id="confirmBtn">
-        Confirmar Entrega
+      <button class="card-edit-btn-new" (click)="toggleAddressEdit()" id="editAddressBtn" style="border: 1px solid #111827; color: #111827;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Editar Endereço
       </button>
-    </section>
+    </div>
+  </section>
 
+  <section class="confirm-section-clear">
+    <button class="btn-confirm" id="confirmBtn" (click)="confirmDelivery(confirmBtn)" #confirmBtn>
+      Confirmar Entrega
+    </button>
+  </section>
 
-    <section class="section order-summary-section">
-      <h2 class="section-title">Resumo do Pedido</h2>
-      <ul class="order-items">
-        <li class="order-item">
-          <span class="item-qty">1x</span>
-          <span class="item-name">Frango Tailandês</span>
-          <span class="item-price">R$ 45,00</span>
-        </li>
-        <li class="order-item">
-          <span class="item-qty">2x</span>
-          <span class="item-name">Salada de Lanches</span>
-          <span class="item-price">R$ 90,00</span>
-        </li>
-        <li class="order-item">
-          <span class="item-qty">1x</span>
-          <span class="item-name">Feijão Tropeiro</span>
-          <span class="item-price">R$ 45,00</span>
-        </li>
-      </ul>
-      <div class="order-totals">
-        <div class="total-row">
-          <span>Subtotal</span>
-          <span>R$ 180,00</span>
-        </div>
-        <div class="total-row">
-          <span>Taxa de entrega</span>
-          <span>R$ 7,00</span>
-        </div>
-        <div class="total-row grand">
-          <span>Total</span>
-          <span>R$ 187,00</span>
-        </div>
-        <div class="payment-badge">
-          <svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="9" rx="2" stroke="#E27E0C" stroke-width="1.5" fill="none"/><path d="M2 7h12" stroke="#E27E0C" stroke-width="1.5"/></svg>
-          <span>Pagamento via PIX</span>
-        </div>
+  <section class="section order-summary-section">
+    <h2 class="section-title">Resumo do Pedido</h2>
+    <ul class="order-items">
+      <li class="order-item"><span class="item-qty">1x</span><span class="item-name">Frango Tailandês</span><span class="item-price">R$ 45,00</span></li>
+      <li class="order-item"><span class="item-qty">2x</span><span class="item-name">Salada de Lanches</span><span class="item-price">R$ 90,00</span></li>
+      <li class="order-item"><span class="item-qty">1x</span><span class="item-name">Feijão Tropeiro</span><span class="item-price">R$ 45,00</span></li>
+    </ul>
+    <div class="order-totals">
+      <div class="total-row"><span>Subtotal</span><span>R$ 180,00</span></div>
+      <div class="total-row"><span>Taxa de entrega</span><span>R$ 7,00</span></div>
+      <div class="total-row grand"><span>Total</span><span>R$ {{ pedido?.total || '187,00' }}</span></div>
+      <div class="payment-badge">
+        <svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="9" rx="2" stroke="#E27E0C" stroke-width="1.5" fill="none"/><path d="M2 7h12" stroke="#E27E0C" stroke-width="1.5"/></svg>
+        <span>Pagamento via PIX</span>
       </div>
-    </section>
+    </div>
+  </section>
 
+  <section class="section support-section">
+    <h2 class="section-title">Problemas com a entrega?</h2>
+    <div class="support-actions">
+      <button class="btn-support">
+        <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="16" r="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5.5 6.5a3.5 3.5 0 017 0c0 2-2 3-3.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+        Falar com o entregador
+      </button>
+      <button class="btn-support">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 4h12a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2V5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+        Falar com a loja
+      </button>
+    </div>
+  </section>
 
-    <section class="section support-section">
-      <h2 class="section-title">Problemas com a entrega?</h2>
-      <div class="support-actions">
-        <button class="btn-support">
-          <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="16" r="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5.5 6.5a3.5 3.5 0 017 0c0 2-2 3-3.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
-          Falar com o entregador
-        </button>
-        <button class="btn-support">
-          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 4h12a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2V5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
-          Falar com a loja
-        </button>
-      </div>
-    </section>
-
-  </main>
+</main>

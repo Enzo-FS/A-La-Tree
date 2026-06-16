@@ -1,51 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../../core/services/order.service'; // Caminho corrigido com ../../
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+import { OrderService } from '../../core/services/order.service';
 
 @Component({
   selector: 'app-customer-tracking',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './customer-tracking.html',
   styleUrl: './customer-tracking.css'
 })
 export class CustomerTracking implements OnInit {
-  orderState: any;
+  pedido: any = { status: 'recebidos' }; 
+  etaText: string = 'Calculando...';
   addressEditMode: boolean = false;
 
-  // Construtor limpo, sem letras perdidas
-  constructor(public orderService: OrderService) {
-    this.orderState = this.orderService.orderState;
-  }
+  // INJETAMOS O DETECTOR DE MUDANÇAS AQUI
+  constructor(public orderService: OrderService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.initETA();
+    this.orderService.pedidoAtual$.subscribe(dadosAtualizados => {
+      this.pedido = dadosAtualizados;
+      this.atualizarCronometro(this.pedido.tempoEstimadoMinutos);
+      
+      // FORÇA A TELA A ATUALIZAR SEM PRECISAR DE F5
+      this.cdr.detectChanges(); 
+    });
   }
 
-  initETA() {
-    let total = 19 * 60 + 30;
-    
-    const tick = () => {
-      if (total <= 0) { 
-        this.orderState.etaText = 'Chegando!'; 
-        return; 
-      }
-      const m = Math.floor(total / 60);
-      const s = total % 60;
-      this.orderState.etaText = `${m}:${String(s).padStart(2, '0')} min`;
-      total--;
-      setTimeout(tick, 1000);
-    };
-    tick();
+  getNivelStatus(status: string): number {
+    const niveis = ['recebidos', 'preparacao', 'prontos', 'caminho', 'entregues'];
+    return niveis.indexOf(status);
   }
 
-  toggleAddressEdit() {
-    this.addressEditMode = !this.addressEditMode;
-  }
-
-  saveAddress() {
-    this.addressEditMode = false;
-  }
-
-  confirmDelivery(btnElement: HTMLElement) {
+  atualizarCronometro(minutos: number) { this.etaText = `${minutos} a ${minutos + 10} min`; }
+  toggleAddressEdit() { this.addressEditMode = !this.addressEditMode; }
+  saveAddress() { this.addressEditMode = false; }
+  confirmDelivery(btnElement: HTMLElement) { 
     btnElement.classList.add('confirmed');
     btnElement.innerHTML = 'Entrega confirmada!';
   }

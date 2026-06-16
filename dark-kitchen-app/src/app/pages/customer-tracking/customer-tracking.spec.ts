@@ -1,22 +1,40 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { OrderService } from '../../core/services/order.service';
 
-import { CustomerTracking } from './customer-tracking';
+@Component({
+  selector: 'app-customer-tracking',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './customer-tracking.html',
+  styleUrl: './customer-tracking.css'
+})
+export class CustomerTracking implements OnInit {
+  // Inicializamos com um valor seguro para o HTML não quebrar no primeiro milissegundo
+  pedido: any = { status: 'recebidos' }; 
+  etaText: string = 'Calculando...';
 
-describe('CustomerTracking', () => {
-  let component: CustomerTracking;
-  let fixture: ComponentFixture<CustomerTracking>;
+  constructor(public orderService: OrderService) {}
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CustomerTracking],
-    }).compileComponents();
+  ngOnInit(): void {
+    // Fica escutando as mudanças da Loja em tempo real
+    this.orderService.pedidoAtual$.subscribe(dadosAtualizados => {
+      this.pedido = dadosAtualizados;
+      this.atualizarCronometro(this.pedido.tempoEstimadoMinutos);
+    });
+  }
 
-    fixture = TestBed.createComponent(CustomerTracking);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+  // Converte a string de status em um número de 0 a 4 para a barra de progresso
+  getNivelStatus(status: string): number {
+    const niveis = ['recebidos', 'preparacao', 'prontos', 'caminho', 'entregues'];
+    return niveis.indexOf(status);
+  }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  atualizarCronometro(minutos: number) {
+    this.etaText = `${minutos} a ${minutos + 10} min`;
+  }
+
+  toggleAddressEdit() { /* vazio por enquanto */ }
+  saveAddress() { /* vazio por enquanto */ }
+  confirmDelivery(btnElement: HTMLElement) { /* vazio por enquanto */ }
+}
