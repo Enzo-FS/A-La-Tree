@@ -36,3 +36,59 @@ body {
   padding: 0;
   background-color: #E5E5E5; /* Cinza para destacar a tela do app */
 }
+
+.floating-bottom-nav {
+  position: fixed;
+  bottom: 20px; /* Descola do fundo da tela */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  opacity: 0.5; /* Itens inativos ficam mais opacos */
+}
+
+.nav-item.active {
+  opacity: 1; /* Item ativo fica com cor forte */
+  transform: translateY(-2px); /* Micro-interação: sobe um pouquinho quando ativo */
+}
+
+.icon-space {
+  width: 24px;
+  height: 24px;
+  background-color: #ccc; /* Remova ou mude isso quando colocar a <img> real */
+  border-radius: 4px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-space img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
