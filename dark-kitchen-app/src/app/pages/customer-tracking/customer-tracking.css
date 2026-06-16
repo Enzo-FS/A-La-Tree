@@ -96,7 +96,11 @@ input  { font-family: inherit; }
 .header-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 8;
+}
+
+.header-logo img{
+  padding: 1px;
 }
 .logo-text { font-family: var(--font-display); font-size: 17px; color: var(--white); font-weight: 800; letter-spacing: -.03em; }
 

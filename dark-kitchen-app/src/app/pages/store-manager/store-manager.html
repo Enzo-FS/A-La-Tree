@@ -2,7 +2,7 @@
   <div class="store-header-inner">
     <span class="header-title">Gerenciamento de Pedido</span>
     <div class="header-logo">
-      <span class="logo-text">DK</span>
+      <img src="https://i.imgur.com/nKQluiG.png" alt="logo">
     </div>
   </div>
 </header>
@@ -15,144 +15,150 @@
     <button class="tab-btn" [class.active]="currentTab === 'preparacao'" (click)="setTab('preparacao')">Em Preparação</button>
     <button class="tab-btn" [class.active]="currentTab === 'prontos'" (click)="setTab('prontos')">Prontos</button>
     <button class="tab-btn" [class.active]="currentTab === 'caminho'" (click)="setTab('caminho')">A Caminho</button>
+    <button class="tab-btn" [class.active]="currentTab === 'motoboys'" (click)="setTab('motoboys')">Motoboys</button>
   </nav>
 
   <section class="tab-content" [class.active]="currentTab === 'recebidos'">
-    <div class="order-card">
-      <div class="oc-header">
-        <span class="oc-number">#1234</span>
-        <span class="oc-time">Recebido às 14:20</span>
-      </div>
-      
-      <div class="oc-body">
-        <div class="oc-customer-box">
-          <div class="oc-info-row">
-            <span class="oc-label">Cliente</span>
-            <span class="oc-value">João Silva</span>
-          </div>
-          <div class="oc-info-row">
-            <span class="oc-label">Local de Entrega</span>
-            <span class="oc-value address-highlight">Rua Tiradentes, 67 - Bairro 1</span>
+    @for (pedido of getPedidos('recebidos'); track pedido.id) {
+      <div class="order-card">
+        <div class="oc-header">
+          <span class="oc-number">#{{ pedido.id }}</span>
+        </div>
+        <div class="oc-body">
+          <p class="oc-client"><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+          <p class="oc-address"><strong>Local:</strong> {{ pedido.endereco }}</p>
+          <p><strong>Resumo:</strong> {{ pedido.resumo }}</p>
+          <div class="oc-financial">
+            <span>{{ pedido.pagto }}</span>
+            <span class="oc-total">R$ {{ pedido.total }}</span>
           </div>
         </div>
-        
-        <div class="oc-summary">
-          <span class="summary-title">Resumo do Pedido</span>
-          <div class="oc-summary-list">
-            <div class="oc-item"><span class="item-qty">1x</span><span class="item-name">Frango Tailandês</span></div>
-            <div class="oc-item"><span class="item-qty">2x</span><span class="item-name">Salada de Lanches</span></div>
-          </div>
-        </div>
-        
-        <hr class="oc-divider" />
-        
-        <div class="oc-financial-box">
-          <div class="payment-badge-elaborate">
-            <svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M2 7h12" stroke="currentColor" stroke-width="1.5"/></svg>
-            <span>Via PIX</span>
-          </div>
-          <div class="oc-total-box">
-            <span class="total-label">Valor Total</span>
-            <span class="total-value">R$ 187,00</span>
-          </div>
+        <div class="oc-actions split">
+          <button class="btn-action btn-danger">Recusar</button>
+          <button class="btn-action btn-success" (click)="avancarPedido(pedido, 'preparacao')">Aceitar Pedido</button>
         </div>
       </div>
-
-      <div class="oc-actions split">
-        <button class="btn-action btn-danger">Recusar</button>
-        <button class="btn-action btn-success" (click)="processOrder(1, 'Preparando', 'preparacao')">Aceitar Pedido</button>
-      </div>
-    </div>
+    } @empty {
+      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido novo no momento.</p>
+    }
   </section>
 
   <section class="tab-content" [class.active]="currentTab === 'preparacao'">
-    <div class="order-card preparing">
-      <div class="oc-header">
-        <span class="oc-number">#1235</span>
-        <span class="oc-time">Recebido às 14:15</span>
-      </div>
-      <div class="oc-body">
-        <div class="status-badge preparing-badge">Preparando na Cozinha...</div>
-        <p class="oc-client"><strong>Cliente:</strong> Maria Souza</p>
-        <p class="oc-address"><strong>Local:</strong> Av. Paulista, 1000 - Bela Vista</p>
-        
-        <div class="oc-summary">
-          <span class="summary-title">Resumo do Pedido:</span>
-          <ul><li>1x Feijão Tropeiro</li></ul>
+    @for (pedido of getPedidos('preparacao'); track pedido.id) {
+      <div class="order-card preparing">
+        <div class="oc-header">
+          <span class="oc-number">#{{ pedido.id }}</span>
         </div>
-        
-        <div class="oc-financial">
-          <span><strong>Pagamento:</strong> Cartão de Crédito</span>
-          <span class="oc-total">R$ 45,00</span>
+        <div class="oc-body">
+          <div class="status-badge preparing-badge">Cozinha</div>
+          <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+          <p><strong>Itens:</strong> {{ pedido.resumo }}</p>
+        </div>
+        <div class="oc-actions full">
+          <button class="btn-action btn-orange" (click)="avancarPedido(pedido, 'prontos')">Marcar como Pronto</button>
         </div>
       </div>
-      <div class="oc-actions full">
-        <button class="btn-action btn-orange" (click)="processOrder(2, 'Pedido Pronto', 'prontos')">Marcar como Pronto</button>
-      </div>
-    </div>
+    } @empty {
+      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido na cozinha.</p>
+    }
   </section>
 
   <section class="tab-content" [class.active]="currentTab === 'prontos'">
-    <div class="order-card ready">
-      <div class="oc-header">
-        <span class="oc-number">#1236</span>
-        <span class="oc-time">Recebido às 14:05</span>
-      </div>
-      <div class="oc-body">
-        <p class="oc-client"><strong>Cliente:</strong> Carlos Almeida</p>
-        <p class="oc-address"><strong>Local:</strong> Rua Augusta, 500 - Consolação</p>
-        
-        <div class="oc-summary">
-          <span class="summary-title">Resumo do Pedido:</span>
-          <ul><li>2x Hambúrguer Artesanal</li></ul>
+    @for (pedido of getPedidos('prontos'); track pedido.id) {
+      <div class="order-card ready">
+        <div class="oc-header">
+          <span class="oc-number">#{{ pedido.id }}</span>
         </div>
-        
-        <div class="oc-financial">
-          <span><strong>Pagamento:</strong> Dinheiro (Troco para R$ 100)</span>
-          <span class="oc-total">R$ 70,00</span>
+        <div class="oc-body">
+          <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+          <p><strong>Local:</strong> {{ pedido.endereco }}</p>
+          
+          <div style="margin-top: 15px;">
+            <label style="color: black; font-size: 14px; margin-bottom: 5px; display: block;">Selecione o Entregador:</label>
+            
+            <select #selectMoto style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: white; color: black; cursor: pointer;">
+              
+              @if (motoboys$ | async; as listaDeMotoboys) {
+                <option value="">-- Frota Disponível ({{ listaDeMotoboys.length }} encontrados) --</option>
+                
+                @for (moto of listaDeMotoboys; track moto.id) {
+                  <option [value]="moto.id">{{ moto.nome }} ({{ moto.placa }})</option>
+                }
+              } @else {
+                <option value="">⏳ Carregando conexão com o banco...</option>
+              }
+              
+            </select>
+          </div>  
+
+        </div>
+        <div class="oc-actions full">
+          <button class="btn-action btn-blue" (click)="atribuirMotoboy(pedido, selectMoto)">Atribuir e Enviar</button>
         </div>
       </div>
-      <div class="oc-actions full">
-        <button class="btn-action btn-blue" (click)="processOrder(3, 'Retirado pelo motoboy', 'caminho')">Atribuir Motoboy</button>
-      </div>
-    </div>
+    } @empty {
+      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido aguardando retirada.</p>
+    }
   </section>
 
   <section class="tab-content" [class.active]="currentTab === 'caminho'">
-    <div class="order-card on-way">
-      <div class="oc-header">
-        <span class="oc-number">#1237</span>
-        <span class="oc-time">Recebido às 13:45</span>
-      </div>
-      <div class="oc-body">
-        <div class="delivery-info">
-          <div class="info-row"><strong>Motoboy:</strong> Thiago S. B.</div>
-          <div class="info-row"><strong>Tempo Estimado:</strong> 19:30 min</div>
+    @for (pedido of getPedidos('caminho'); track pedido.id) {
+      <div class="order-card on-way">
+        <div class="oc-header">
+          <span class="oc-number">#{{ pedido.id }}</span>
         </div>
-        <p class="oc-client"><strong>Cliente:</strong> Ana Costa</p>
-        <p class="oc-address"><strong>Local de Entrega:</strong> Rua das Flores, 12 - Centro</p>
-        
-        <div class="oc-summary">
-          <span class="summary-title">Resumo do Pedido:</span>
-          <ul><li>1x Combo Casal</li></ul>
+        <div class="oc-body">
+          <div style="background: rgb(255, 255, 255); padding: 10px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #4ade80;">
+            <strong style="color: #4ade80;">Motoboy em trânsito:</strong><br><br> {{ pedido.motoboy }}
+          </div>
+          <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+          <p><strong>Local:</strong> {{ pedido.endereco }}</p>
         </div>
-        
-        <div class="oc-financial">
-          <span><strong>Pagamento:</strong> PIX</span>
-          <span class="oc-total">R$ 120,00</span>
+        <div class="oc-actions full">
+          <button class="btn-action btn-success" (click)="avancarPedido(pedido, 'entregues')">Confirmar Entrega</button>
         </div>
       </div>
-      <div class="oc-actions full">
-        <button class="btn-action btn-success" (click)="processOrder(4, 'Pedido entregue', 'recebidos')">Confirmar Entrega</button>
-      </div>
-    </div>
+    } @empty {
+      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum motoboy na rua no momento.</p>
+    }
   </section>
 
-  <div class="test-form" style="padding: 20px; background: #222; color: #fff; border-radius: 8px; margin-bottom: 20px;">
-  <h3 style="margin-bottom: 10px;">Cadastrar Produto Teste</h3>
-  <input #nome type="text" placeholder="Nome do Lanche" style="display:block; margin-bottom: 5px;">
-  <input #preco type="number" placeholder="Preço" style="display:block; margin-bottom: 5px;">
-  <button (click)="cadastrarLanche(nome.value, preco.value)" class="btn-action btn-success">Salvar no Firebase</button>
-  </div>
 
+  <section class="tab-content" [class.active]="currentTab === 'motoboys'">
+  <div class="order-card">
+    <div class="oc-header">
+      <span class="oc-number">Cadastro de Frota</span>
+    </div>
+    
+    <div class="oc-body">
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+        <div class="oc-info-row">
+          <span class="oc-label">Nome Completo</span>
+          <input #nomeMoto type="text" placeholder="Ex: Thiago Silva" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: white;">
+        </div>
+
+        <div class="oc-info-row">
+          <span class="oc-label">Modelo do Veículo</span>
+          <input #modeloMoto type="text" placeholder="Ex: Honda CG 160" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: white;">
+        </div>
+
+        <div class="oc-info-row">
+          <span class="oc-label">Placa</span>
+          <input #placaMoto type="text" placeholder="Ex: ABC-1234" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: white; text-transform: uppercase;">
+        </div>
+
+        <div class="oc-info-row">
+          <span class="oc-label">Telefone (WhatsApp)</span>
+          <input #telefoneMoto type="text" placeholder="(11) 99999-9999" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);">
+        </div>
+      </div>
+    </div>  
+
+    <div class="oc-actions full" style="margin-top: 20px;">
+      <button class="btn-action btn-blue" (click)="cadastrarMotoboy(nomeMoto.value, modeloMoto.value, placaMoto.value, telefoneMoto.value)">
+        Registrar Motoboy
+      </button>
+    </div>
+  </div>
+</section>
 </main>
