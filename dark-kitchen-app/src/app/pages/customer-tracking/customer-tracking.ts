@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { OrderService } from '../../core/services/order.service';
+import { RoutingService } from '../../core/services/routing.service';
 
 @Component({
   selector: 'app-customer-tracking',
@@ -68,4 +69,6 @@ export class CustomerTracking implements OnInit {
     btnElement.innerHTML = '✔ Entrega Finalizada!';
     this.orderService.atualizarStatus('entregues');
   }
+
+  
 }

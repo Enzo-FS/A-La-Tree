@@ -264,12 +264,12 @@ input  { font-family: inherit; }
 /* ─── STEPPER BAR ────────────────────────────── */
 .stepper-bar {
   position: fixed;
-  top: calc(var(--header-h) + 120px); 
+  top: calc(var(--header-h) + 20px); 
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
   max-width: 430px;
-  height: var(--stepper-h);
+  /*--height: var(--stepper-h);*/
   background: var(--white);
   z-index: 99;
   border-bottom: 1.5px solid var(--gray);
@@ -893,4 +893,125 @@ input  { font-family: inherit; }
 .vtl-item:not(.done):not(.active) .vtl-icon svg,
 .vtl-item:not(.done):not(.active) .vtl-icon img {
   opacity: 0.25; 
+}
+
+/* ─── ANIMAÇÃO DO MAPA DE ROTA ─── */
+.delivery-map-container {
+  position: relative;
+  width: auto;
+  height: 90px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  margin: 16px 12px 0 12px;
+  overflow: hidden;
+}
+
+/* A linha cinza de fundo (Rua) */
+.route-line {
+  position: absolute;
+  top: 50%;
+  left: 45px;
+  right: 45px;
+  height: 4px;
+  background: #E5E7EB; /* Cinza claro */
+  transform: translateY(-50%);
+  z-index: 1;
+  border-radius: 4px;
+}
+
+/* A linha laranja que cresce junto com a moto */
+.route-line-progress {
+  position: absolute;
+  top: 50%;
+  left: 45px;
+  height: 4px;
+  background: var(--orange);
+  transform: translateY(-50%);
+  z-index: 2;
+  border-radius: 4px;
+  animation: fillRoute 4s ease-in-out infinite;
+}
+
+/* Elementos fixos (Loja e Casa) */
+.map-node {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--white); /* Cobre a linha atrás */
+  padding: 0 4px;
+}
+
+.node-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--surface);
+  border: 2px solid var(--gray);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.store-node .node-icon { 
+  border-color: var(--orange); 
+  background: var(--orange-lite);
+}
+
+.node-label {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--gray-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* O container que se move de um lado pro outro */
+.moto-animator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  z-index: 4;
+  /* Duração da viagem (4 segundos), animação suave e em loop */
+  animation: driveMoto 4s ease-in-out infinite; 
+}
+
+/* O círculo visual da moto */
+.moto-icon {
+  width: 32px;
+  height: 32px;
+  background: #111827; /* Cor preta para destacar bem */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  border: 2px solid var(--white);
+}
+
+/* ─── MOTOR DAS ANIMAÇÕES ─── */
+
+/* Move a moto da esquerda (loja) para a direita (casa) */
+@keyframes driveMoto {
+  0% { left: 45px; }
+  15% { left: 45px; } /* Dá uma pausa na loja antes de acelerar */
+  85% { left: calc(100% - 45px); } /* Chega na casa */
+  100% { left: calc(100% - 45px); } /* Pausa na casa */
+}
+
+/* Estica a linha laranja na exata mesma velocidade da moto */
+@keyframes fillRoute {
+  0% { width: 0; }
+  15% { width: 0; }
+  85% { width: calc(100% - 90px); }
+  100% { width: calc(100% - 90px); }
 }

@@ -19,9 +19,6 @@
   </div>
 </header>
 
-<div class="custom-placeholder">
-  </div>
-
 <div class="stepper-bar" id="stepperBar">
   <div class="stepper-track">
     <div class="step" [class.active]="getNivelStatus(pedido.status) >= 0"><div class="step-rect"></div></div>
@@ -40,6 +37,27 @@
       @case ('entregues') { Pedido Entregue }
     }
   </div>
+<!--
+  @if (pedido.status === 'caminho') {
+  <div class="delivery-map-container">
+    <div class="route-line"></div>
+    <div class="route-line-progress"></div>
+
+    <div class="map-node store-node">
+      <div class="node-icon">🏪</div>
+      <span class="node-label">Loja</span>
+    </div>
+
+    <div class="moto-animator">
+      <div class="moto-icon">🛵</div>
+    </div>
+
+    <div class="map-node house-node">
+      <div class="node-icon">🏠</div>
+      <span class="node-label">Destino</span>
+    </div>
+  </div>
+}-->
 </div>
 
 <main class="main-content">
