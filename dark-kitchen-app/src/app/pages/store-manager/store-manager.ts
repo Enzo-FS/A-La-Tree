@@ -14,21 +14,18 @@ import { Observable } from 'rxjs';
 export class StoreManager implements OnInit {
   currentTab: string = 'recebidos';
   motoboys$: Observable<any[]>;
-  pedidos: any[] = []; // Começa vazio para podermos puxar a memória do navegador
-  listaMotoboys: any[] = []; // Variável de apoio para puxarmos Placa e Veículo
+  pedidos: any[] = []; 
+  listaMotoboys: any[] = [];
 
   constructor(private dbService: DatabaseService, private orderService: OrderService) {
     this.motoboys$ = this.dbService.getMotoboys();
-    // Guarda a frota nos bastidores para podermos puxar os dados completos depois
     this.motoboys$.subscribe(motos => this.listaMotoboys = motos);
   }
 
-  // 1. SOLUÇÃO DO RESET: Lê o Cérebro toda vez que a página carrega
+  
   ngOnInit() {
     this.orderService.pedidoAtual$.subscribe(pedidoGlobal => {
-      this.currentTab = pedidoGlobal.status; // Vai para a aba correta sozinho
-      
-      // Monta a tabela mantendo o pedido #1234 vivo e atualizado
+      this.currentTab = pedidoGlobal.status;
       this.pedidos = [
         pedidoGlobal, 
         { id: '1235', cliente: 'Maria Souza', endereco: 'Av. Paulista, 1000', status: 'preparacao', resumo: '1x Feijão Tropeiro', total: '45,00', pagto: 'Cartão de Crédito', motoboy: null },
@@ -47,7 +44,7 @@ export class StoreManager implements OnInit {
 
   avancarPedido(pedido: any, novoStatus: string) {
     if (pedido.id === '1234') {
-      this.orderService.atualizarStatus(novoStatus); // Envia para a memória global
+      this.orderService.atualizarStatus(novoStatus);
     } else {
       pedido.status = novoStatus;
       this.setTab(novoStatus); 
@@ -63,10 +60,10 @@ export class StoreManager implements OnInit {
       return;
     }
 
-    // 2. SOLUÇÃO DO VEÍCULO: Procura o objeto completo (com Placa e Modelo)
+    
     let motoboyCompleto = this.listaMotoboys.find(m => m.id === idMoto);
     
-    // Fallback de segurança caso a internet pisque na hora
+    
     if (!motoboyCompleto) {
         const nomeExtraido = optionText.split(' (')[0];
         const placaExtraida = optionText.includes('(') ? optionText.split('(')[1].replace(')', '') : 'N/A';
@@ -74,7 +71,6 @@ export class StoreManager implements OnInit {
     }
 
     if (pedido.id === '1234') {
-      // AGORA SIM: Enviamos o "motoboyCompleto" e a tela do cliente vai conseguir ler os dados!
       this.orderService.atribuirMotoboy(motoboyCompleto);
     } else {
       pedido.motoboy = motoboyCompleto.nome;
@@ -97,10 +93,10 @@ export class StoreManager implements OnInit {
     });
   }
 
-  // FUNÇÃO NOVA: Chama o serviço para resetar
+ 
   resetarTeste() {
     this.orderService.resetarPedidoTeste();
-    this.setTab('recebidos'); // Força o gerente a voltar para a primeira aba
+    this.setTab('recebidos');
     alert('🔄 Pedido #1234 resetado! O teste voltou para o início.');
   }
 }

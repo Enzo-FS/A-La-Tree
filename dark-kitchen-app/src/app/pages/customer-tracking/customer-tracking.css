@@ -432,7 +432,7 @@ input  { font-family: inherit; }
   transition: all .3s;
   z-index: 1;
 }
-.vtl-item.done .vtl-icon   { background: var(--orange-lite); color: var(--orange); }
+.vtl-item.done .vtl-icon{background-color: #E27E0C;}   /*{ background: var(--orange-lite); color: var(--orange); }*/
 .vtl-item.active .vtl-icon { background: var(--orange); color: var(--white); box-shadow: 0 4px 14px rgba(226,126,12,.4); }
 
 .vtl-connector {

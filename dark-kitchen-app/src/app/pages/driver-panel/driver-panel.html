@@ -1,0 +1,85 @@
+<header class="driver-header">
+  <span class="header-title">Painel do Entregador</span>
+  <span class="driver-status-live">● Online</span>
+</header>
+
+<main class="driver-main">
+  @if (pedido) {
+    
+    @switch (pedido.status) {
+      
+      @case ('prontos') {
+        <div class="driver-card alert">
+          <div class="card-top">
+            <span class="order-id">Pedido #{{ pedido.id }}</span>
+            <span class="badge yellow">Pronto para Retirada</span>
+          </div>
+          <p class="instruction">Vá até a cozinha buscar este pedido.</p>
+          <div class="info-row">
+            <strong>Resumo:</strong> <span>{{ pedido.resumo }}</span>
+          </div>
+          <button class="btn-driver accept" (click)="iniciarEntrega()">
+            🏍️ Coletei e Estou a Caminho
+          </button>
+        </div>
+      }
+
+      @case ('caminho') {
+        <div class="driver-card active">
+          <div class="card-top">
+            <span class="order-id">Pedido #{{ pedido.id }}</span>
+            <span class="badge green">Em Rota de Entrega</span>
+          </div>
+          
+          <div class="delivery-address-box">
+            <h3>Endereço do Cliente</h3>
+            <p class="main-address"><strong>{{ pedido.rua }}, {{ pedido.numero }}</strong></p>
+            <p class="sub-address">{{ pedido.bairro }} - CEP: {{ pedido.cep }}</p>
+            @if (pedido.obs) {
+              <p class="driver-obs">⚠️ Obs: {{ pedido.obs }}</p>
+            }
+          </div>
+
+          <div class="financial-strip">
+            <div>
+              <span class="label">Forma de Pgto:</span>
+              <strong>{{ pedido.pagto || 'PIX' }}</strong>
+            </div>
+            <div>
+              <span class="label">Total a Receber:</span>
+              <strong class="price">R$ {{ pedido.total }}</strong>
+            </div>
+          </div>
+
+          <div class="delivery-code-box">
+            <span>Código de Verificação exigido:</span>
+            <strong>3577</strong>
+          </div>
+
+          <button class="btn-driver success" (click)="concluirEntrega()">
+            ✓ Confirmar Entrega ao Cliente
+          </button>
+        </div>
+      }
+
+      @case ('entregues') {
+        <div class="driver-empty-state">
+          <div class="empty-icon">🎉</div>
+          <h3>Nenhuma entrega pendente!</h3>
+          <p>Aguardando novos pedidos serem liberados pela cozinha.</p>
+        </div>
+      }
+
+      @default {
+        <div class="driver-empty-state">
+          <div class="empty-icon">⏳</div>
+          <h3>Nenhum pedido atribuído</h3>
+          <p>Os pedidos aparecerão aqui assim que forem liberados para a rota.</p>
+        </div>
+      }
+    }
+
+  } @else {
+    <p class="loading-text">Carregando painel de rotas...</p>
+  }
+</main>
