@@ -25,7 +25,19 @@ export class App {
   }
 
   doLogin(user: string, pass: string) {
-    if (user === 'admin' && pass === '1234') {
+    if (user === 'cliente' && pass === '') {
+      this.showLogin = false;
+      this.router.navigate(['/pedido']); 
+    } else {
+      this.loginError = true;
+    }
+    if (user === 'moto' && pass === '') {
+      this.showLogin = false;
+      this.router.navigate(['/motoboy']); 
+    } else {
+      this.loginError = true;
+    }
+    if (user === 'gerente' && pass === '') {
       this.showLogin = false;
       this.router.navigate(['/painel']); 
     } else {
