@@ -24,11 +24,21 @@
 
 <div class="stepper-bar" id="stepperBar">
   <div class="stepper-track">
-    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 0" [class.current]="pedido.status === 'recebidos'"><div class="step-rect"></div><span>Confirmado</span></div>
-    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 1" [class.current]="pedido.status === 'preparacao'"><div class="step-rect"></div><span>Preparando</span></div>
-    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 2" [class.current]="pedido.status === 'prontos'"><div class="step-rect"></div><span>Pronto</span></div>
-    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 3" [class.current]="pedido.status === 'caminho'"><div class="step-rect"></div><span>Motoboy</span></div>
-    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 4" [class.current]="pedido.status === 'entregues'"><div class="step-rect"></div><span>Entregue</span></div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 0"><div class="step-rect"></div></div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 1"><div class="step-rect"></div></div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 2"><div class="step-rect"></div></div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 3"><div class="step-rect"></div></div>
+    <div class="step" [class.active]="getNivelStatus(pedido.status) >= 4"><div class="step-rect"></div></div>
+  </div>
+  
+  <div class="stepper-status-text">
+    @switch (pedido.status) {
+      @case ('recebidos') { Aguardando Confirmação }
+      @case ('preparacao') { Em Preparação }
+      @case ('prontos') { Pronto para Retirada }
+      @case ('caminho') { Retirado pelo Motoboy }
+      @case ('entregues') { Pedido Entregue }
+    }
   </div>
 </div>
 
@@ -36,27 +46,35 @@
   <section class="section status-visual-section">
     <h2 class="status-title">Status do Pedido</h2>
     <div class="visual-timeline">
-      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 0" [class.active]="pedido.status === 'recebidos'">
-        <div class="vtl-icon"><img src="teste/confirmacao.png" alt=""></div>
-        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 0"></div>
-        <div class="vtl-content"><p class="vtl-title">Aguardando confirmação</p></div>
-      </div>
-      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 1" [class.active]="pedido.status === 'preparacao'">
-        <div class="vtl-icon"><img src="/teste/preparando.png" alt=""></div>
-        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 1"></div>
-        <div class="vtl-content"><p class="vtl-title">Preparando</p></div>
-      </div>
-      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 2" [class.active]="pedido.status === 'prontos'">
-        <div class="vtl-icon"><img src="/teste/pedido pronto.png" alt=""></div>
-        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 2"></div>
-        <div class="vtl-content"><p class="vtl-title">Pedido pronto</p></div>
-      </div>
-      <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 3" [class.active]="pedido.status === 'caminho'">
-        <div class="vtl-icon"><img src="/teste/retirado pelo motoboy.png" alt=""></div>
-        <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 3"></div>
-        <div class="vtl-content"><p class="vtl-title">Retirado pelo motoboy</p></div>
-      </div>
-    </div>
+  <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 0" [class.active]="pedido.status === 'recebidos'">
+    <div class="vtl-icon"><img src="/teste/chm.png" alt="" style="width: 22px; height: 22px; object-fit: contain;"></div>
+    <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 0"></div>
+    <div class="vtl-content"><p class="vtl-title">Aguardando confirmação</p></div>
+  </div>
+
+  <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 1" [class.active]="pedido.status === 'preparacao'">
+    <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 5v6l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+    <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 1"></div>
+    <div class="vtl-content"><p class="vtl-title">Preparando</p></div>
+  </div>
+
+  <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 2" [class.active]="pedido.status === 'prontos'">
+    <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><rect x="5" y="11" width="12" height="7" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 11V8.5a3 3 0 016 0V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
+    <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 2"></div>
+    <div class="vtl-content"><p class="vtl-title">Pedido pronto</p></div>
+  </div>
+
+  <div class="vtl-item" [class.done]="getNivelStatus(pedido.status) > 3" [class.active]="pedido.status === 'caminho'">
+    <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="7" cy="16" r="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="15" cy="16" r="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3 8h9l3 5H3V8z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M12 8l3.5 3H18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></div>
+    <div class="vtl-connector" [class.done]="getNivelStatus(pedido.status) > 3"></div>
+    <div class="vtl-content"><p class="vtl-title">Retirado pelo motoboy</p></div>
+  </div>
+
+  <div class="vtl-item last" [class.done]="getNivelStatus(pedido.status) > 4" [class.active]="pedido.status === 'entregues'">
+    <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 11l4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+    <div class="vtl-content"><p class="vtl-title">Pedido Entregue</p></div>
+  </div>
+</div>
   </section>
 
   <section class="driver-address-container-new">

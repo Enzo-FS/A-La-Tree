@@ -321,4 +321,4 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
 .btn-success { background: var(--success); color: var(--white); }
 .btn-orange { background: var(--orange); color: var(--white); }
-.btn-blue { background: var(--blue); color: var(--white); }
+.btn-blue{background: #E27E0C; color: white}   /* { background: var(--blue); color: var(--white); }*/

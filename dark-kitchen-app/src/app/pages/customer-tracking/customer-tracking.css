@@ -825,3 +825,72 @@ input  { font-family: inherit; }
   object-fit: cover;
   border: 1px solid var(--gray);
 }
+
+/* ─── AJUSTES DO STEPPER BAR ─── */
+:root {
+  --stepper-h: 84px; /* Aumentamos a altura do container para caber o texto tranquilamente */
+}
+
+.stepper-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* Distância entre a barra preenchida e o texto central */
+}
+
+.stepper-track {
+  width: 100%;
+  height: auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.step {
+  flex: 1; /* Faz as 5 etapas dividirem o espaço perfeitamente */
+  display: flex;
+  align-items: center;
+}
+
+.step-rect {
+  width: 100%;
+  height: 12px; /* Deixa as barras bem mais grossas e preenchidas */
+  background: #DFDFDF;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+/* Oculta textos individuais (caso ainda exista algum no seu HTML) */
+.step span { 
+  display: none; 
+}
+
+/* O novo texto que ficará centralizado embaixo */
+.stepper-status-text {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
+
+/* ─── DISTANCIAMENTO ENTRE OS COMPONENTES ─── */
+.main-content {
+  /* Aumentamos a distância adicionando 40px no final em vez dos 16px antigos */
+  padding-top: calc(var(--header-h) + 120px + var(--stepper-h) + 40px);
+}
+
+.status-visual-section {
+  /* Adiciona uma margem extra de respiro para descolar do Stepper */
+  margin-top: 12px; 
+}
+
+/* ─── OPACIDADE DOS ÍCONES INATIVOS ─── */
+/* Afeta apenas o SVG (ou a imagem) de dentro do círculo quando a etapa não for active nem done */
+.vtl-item:not(.done):not(.active) .vtl-icon svg,
+.vtl-item:not(.done):not(.active) .vtl-icon img {
+  opacity: 0.25; 
+}
