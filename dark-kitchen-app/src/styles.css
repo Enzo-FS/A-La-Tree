@@ -1,55 +1,150 @@
-:root {
-  --white:      #FFFFFF;
-  --orange:     #E27E0C;
-  --orange-lite:#FFF3E0;
-  --orange-dark:#B85F00;
-  --gray:       #ECECEC;
-  --gray-mid:   #C4C4C4;
-  --gray-dark:  #6B6B6B;
-  --text:       #1A1A1A;
-  --text-soft:  #555;
-  --surface:    #F8F8F8;
-  --card:       #FFFFFF;
-  --radius-sm:  8px;
-  --radius-md:  14px;
-  --radius-lg:  20px;
-  --shadow-sm:  0 2px 8px rgba(0,0,0,.06);
-  --shadow-md:  0 4px 20px rgba(0,0,0,.10);
-  --header-h:   64px;
-  --stepper-h:  64px;
-  --nav-h:      68px;
-  --font-body:  'Inter', sans-serif;
-  --font-display:'Inter', sans-serif;
-  --ease-spring:cubic-bezier(.34,1.56,.64,1);
-}
-
-/* Reset Global */
+/* ==========================================================================
+   RESET GLOBAL E FONTES
+   ========================================================================== */
 *, *::before, *::after { 
   box-sizing: border-box; 
   margin: 0; 
   padding: 0; 
 }
 
-/* Fundo da tela do computador */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #E5E5E5; /* Cinza para destacar a tela do app */
+/* ==========================================================================
+   VARIÁVEIS CONSOLIDADAS (O melhor dos dois projetos)
+   ========================================================================== */
+:root {
+  /* Cores do Projeto Original (sstyles.css) */
+  --bg: #F5F5F7;
+  --white: #ffffff;
+  --gray-100: #F0F0F0;
+  --gray-200: #E5E5E5;
+  --gray-400: #aaaaaa;
+  --gray-500: #717182;
+  --gray-700: #444;
+  --gray-800: #1A1A1A;
+  --red: #E53E3E;
+  --radius: 1rem;
+
+  /* Cores e Variáveis da Nova Navbar (styles.css) */
+  --orange: #E27E0C; /* Unificado para usar o laranja mais moderno */
+  --orange-lite: #FFF3E0;
+  --orange-dark: #B85F00;
+  --gray-mid: #C4C4C4;
+  --gray-dark: #6B6B6B;
+  --text: #1A1A1A;
+  --text-soft: #555;
+  --surface: #F8F8F8;
+  --card: #FFFFFF;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.10);
+  --header-h: 64px;
+  --stepper-h: 64px;
+  --nav-h: 68px;
+  --font-body: 'Poppins', 'Inter', sans-serif;
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
 }
 
+/* ==========================================================================
+   ESTRUTURA BASE DA TELA (Fundo do PC + Container do App)
+   ========================================================================== */
+body {
+  font-family: var(--font-body);
+  background-color: #E5E5E5; /* Cinza para destacar a tela do app no PC */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--shadow-md); /* Destaca o celular na tela do PC */
+}
+
+/* ==========================================================================
+   ESTILOS DE FORMULÁRIO E BOTÕES (Do sstyles.css)
+   ========================================================================== */
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray-800); margin-bottom: 0.45rem; }
+.field input {
+  width: 100%; padding: 0.95rem 1rem;
+  background: var(--gray-100); border: none; border-radius: var(--radius);
+  font-size: 0.85rem; font-family: var(--font-body); color: var(--gray-800);
+  outline: none; transition: background 0.2s;
+}
+.field input:focus { background: #E8E8EC; }
+
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  width: 100%; padding: 0.95rem; border: none; border-radius: var(--radius);
+  font-size: 0.95rem; font-weight: 700; font-family: var(--font-body);
+  cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+}
+.btn:active { opacity: 0.8; transform: scale(0.98); }
+.btn-primary { background: var(--orange); color: var(--white); box-shadow: 0 4px 16px rgba(226,126,12,0.35); }
+.btn-outline { background: transparent; color: var(--orange); border: 2px solid var(--orange); }
+.btn-ghost { background: var(--gray-100); color: var(--gray-700); }
+.btn-guest {
+  background: transparent; color: var(--gray-500);
+  border: 1.5px dashed #ccc; font-size: 0.85rem; font-weight: 600; padding: 0.85rem;
+}
+.btn-guest:active { background: var(--gray-100); }
+
+.divider { display: flex; align-items: center; gap: 0.75rem; margin: 1.1rem 0; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+.divider span { font-size: 0.75rem; color: var(--gray-400); white-space: nowrap; }
+
+.link-row { text-align: center; font-size: 0.82rem; color: var(--gray-500); margin-top: 1rem; }
+.link-row button { background: none; border: none; font-weight: 600; color: var(--orange); cursor: pointer; font-family: var(--font-body); font-size: 0.82rem; }
+
+.error-msg { color: var(--red); font-size: 0.75rem; margin-top: 0.25rem; }
+
+/* ==========================================================================
+   COMPONENTES FIXOS (Top Bar e Bottom Nav Antigo do sstyles)
+   ========================================================================== */
+.top-bar { background: var(--white); padding: 3.5rem 1.25rem 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+.icon-btn { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--gray-100); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.icon-btn svg { width: 1rem; height: 1rem; }
+.top-bar-title { flex: 1; text-align: center; font-size: 0.9rem; font-weight: 700; color: var(--gray-800); }
+
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; max-width: 430px; margin: 0 auto;
+  background: #fff; border-top: 1px solid #f0f0f0;
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 0.5rem 0.75rem 0.75rem; z-index: 50;
+}
+.nav-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: none; cursor: pointer; padding: 0 0.75rem; position: relative; font-family: var(--font-body); }
+.nav-btn svg { width: 1.25rem; height: 1.25rem; }
+.nav-btn span { font-size: 0.6rem; font-weight: 500; }
+.nav-center-btn { width: 3.25rem; height: 3.25rem; border-radius: 50%; background: var(--orange); border: 4px solid #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; cursor: pointer; margin-top: -1.5rem; box-shadow: 0 6px 20px rgba(226,126,12,0.45); }
+.cart-badge { position: absolute; top: -2px; right: 0; width: 1rem; height: 1rem; border-radius: 50%; background: var(--orange); color: #fff; font-size: 0.55rem; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+/* ==========================================================================
+   NOVA FLOATING BOTTOM NAV (Do styles.css atualizado com Glassmorphism)
+   ========================================================================== */
 .floating-bottom-nav {
   position: fixed;
-  bottom: 20px; /* Descola do fundo da tela */
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  background-color: #ffffff;
+  max-width: 400px; /* Alinhado ao app-shell */
+  background-color: rgba(255, 255, 255, 0.85); /* Fundo translúcido */
+  backdrop-filter: blur(12px); /* Efeito Glassmorphism limpo */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   z-index: 1000;
 }
 
@@ -59,19 +154,19 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  opacity: 0.5; /* Itens inativos ficam mais opacos */
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+  opacity: 0.5;
 }
 
 .nav-item.active {
-  opacity: 1; /* Item ativo fica com cor forte */
-  transform: translateY(-2px); /* Micro-interação: sobe um pouquinho quando ativo */
+  opacity: 1;
+  transform: translateY(-4px); /* Micro-interação mais fluida */
 }
 
 .icon-space {
   width: 24px;
   height: 24px;
-  background-color: #ccc; /* Remova ou mude isso quando colocar a <img> real */
+  background-color: transparent; 
   border-radius: 4px;
   margin-bottom: 4px;
   display: flex;
@@ -88,7 +183,13 @@ body {
 .nav-label {
   font-size: 11px;
   font-weight: 600;
-  color: #111;
+  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* Utilities adicionais */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.star { color: var(--orange); }
+@keyframes spin { to { transform: rotate(360deg); } }

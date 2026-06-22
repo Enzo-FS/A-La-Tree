@@ -1,29 +1,34 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
+import { routes } from './app.routes'; // O seu arquivo de rotas
 
-// Importações do Firebase
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+// ── Importações do Firebase (Do código do seu colega) ────────────────
+import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
 
-// Suas chaves reais do projeto A-La-Tree
-const firebaseConfig = {
-  apiKey: "AIzaSyAZtYX43hOoqlpiKEHtJcEWXODQHyDY5dM",
-  authDomain: "a-la-tree.firebaseapp.com",
-  projectId: "a-la-tree",
-  storageBucket: "a-la-tree.firebasestorage.app",
-  messagingSenderId: "499713615315",
-  appId: "1:499713615315:web:a68beb5c894c6aba757b26",
-  measurementId: "G-T0SR99182G"
-};
+// ── Importações de Ambiente e Tokens ─────────────────────────────────
+import { environment } from '../environments/environment';
+// ATENÇÃO: Ajustei o caminho do token para a pasta onde descobrimos que ele estava antes!
+import { FIRESTORE_GERENCIA } from './core/services/firestore-gerencia.token';
 
-// Configuração principal da aplicação
 export const appConfig: ApplicationConfig = {
   providers: [
+    // 1. O seu roteador (Isso garante que os botões da Navbar funcionem)
     provideRouter(routes),
-    
-    // Ligando o motor do Firebase usando o padrão do Angular
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideFirestore(() => getFirestore())
+
+    // 2. App principal (cardapio-a-la-tree): login, pedidos, cadastros
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
+
+    // 3. App secundária, nomeada 'gerencia' (gerencia-a-la-tree): catálogo/cardápio
+    provideFirebaseApp(() => initializeApp(environment.firebaseGerencia, 'gerencia')),
+    {
+      provide: FIRESTORE_GERENCIA,
+      useFactory: () => getFirestore(getApp('gerencia')),
+    },
   ]
 };
