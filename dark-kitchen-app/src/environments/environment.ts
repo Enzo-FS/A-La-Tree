@@ -18,4 +18,15 @@ export const environment = {
     messagingSenderId: '361601588662',
     appId: '1:361601588662:web:3f1cc76a00a7df66ccf517',
   },
+
+  firebaseMotoboy: { 
+    apiKey: "AIzaSyAZtYX43hOoqlpiKEHtJcEWXODQHyDY5dM",
+    authDomain: "a-la-tree.firebaseapp.com",
+    projectId: "a-la-tree",
+    storageBucket: "a-la-tree.firebasestorage.app",
+    messagingSenderId: "499713615315",
+    appId: "1:499713615315:web:a68beb5c894c6aba757b26",
+    easurementId: "G-T0SR99182G"
+  }
+
 };

@@ -122,17 +122,37 @@ export class AppStateService {
     }
   }
 
+  /** Login com Interceptador de Papéis (Admin, Motoboy, Cliente) */
   async doLogin(email: string, pass: string): Promise<string | null> {
     if (!email || !pass) return 'Preencha todos os campos.';
     this.loading.set(true);
     this.authError.set('');
+    
     try {
+      // 👑 1. Interceptador de Administrador
+      if (email === 'adminloja' && pass === 'loja') {
+        this.user.set({ id: 'admin_id', name: 'Painel Gerencial', email: 'adminloja' });
+        this.isGuest.set(false);
+        this.router.navigate(['/painel']); // Redireciona para o StoreManager
+        return null;
+      }
+
+      // 🛵 2. Interceptador de Motoboy
+      if (email === 'Motoca' && pass === 'motoca123') {
+        this.user.set({ id: 'motoboy_id', name: 'Painel Motoboy', email: 'Motoca' });
+        this.isGuest.set(false);
+        this.router.navigate(['/motoboy']); // Redireciona para o DriverPanel
+        return null;
+      }
+
+      // 🍔 3. Fluxo Normal de Cliente (Valida no Banco de Dados)
       const u = await this.authService.login(email, pass);
       this.user.set(u);
       this.isGuest.set(false);
       this.cart.set([]);
-      this.router.navigate(['/home']); 
+      this.router.navigate(['/home']); // Redireciona para a Home do Cliente
       return null;
+
     } catch (err) {
       const msg = this.authService.traduzirErro(err);
       this.authError.set(msg);

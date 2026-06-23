@@ -1,18 +1,23 @@
 import { Routes } from '@angular/router';
+import { AdminDashboardComponent } from './pages/store-manager/admin-dashboard.component';
 
-// ─── 1. ROTAS DA OPERAÇÃO (As suas rotas originais) ───
+// ─── originais ───
 import { CustomerTracking } from './pages/customer-tracking/customer-tracking';
 import { StoreManager } from './pages/store-manager/store-manager';
 import { DriverPanel } from './pages/driver-panel/driver-panel';
 
-// ─── 2. ROTAS DO CLIENTE (As telas que sua equipe fez) ───
-// ATENÇÃO: Se você colou a pasta diretamente dentro de 'app' com o nome 'components',
-// mude o caminho abaixo de './pages/client-app/...' para './components/...'.
+// ─── rafa e theo ───
 import { HomeComponent } from './pages/client-app/home/home.component';
 import { ExploreComponent } from './pages/client-app/explore/explore.component';
 import { PaymentComponent } from './pages/client-app/payment/payment.component';
 import { LoginComponent } from './pages/client-app/login/login.component';
 import { OrdersComponent } from './pages/client-app/orders/orders.component';
+
+import { ProfileComponent } from './pages/client-app/profile/profile.component';
+import { ConfirmationComponent } from './pages/client-app/confirmation/confirmation.component';
+import { RegisterComponent } from './pages/client-app/register/register.component';
+import { DetailComponent } from './pages/client-app/detail/detail.component';
+
 
 export const routes: Routes = [
   
@@ -22,19 +27,26 @@ export const routes: Routes = [
   { path: 'pagamento', component: PaymentComponent },
   { path: 'login', component: LoginComponent },
   { path: 'meus-pedidos', component: OrdersComponent },
+  
+  // 👇 AS ROTAS QUE ESTAVAM FALTANDO PARA OS BOTÕES FUNCIONAREM
+  { path: 'perfil', component: ProfileComponent },
+  { path: 'confirmacao', component: ConfirmationComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'detalhes', component: DetailComponent },
 
   // ─── ÁREA OPERACIONAL (Seu ecossistema) ───
   { path: 'pedido', component: CustomerTracking },
+  {path: 'pedido/:id', component: CustomerTracking },
   { path: 'painel', component: StoreManager },
   { path: 'motoboy', component: DriverPanel },
-
+  
   // ─── ROTA PADRÃO (O que abre ao acessar o site "limpo") ───
-  // Alterei para redirecionar para a 'home' do cliente primeiro, 
-  // já que agora temos uma vitrine completa.
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 
   // ─── ROTA CORINGA (Segurança) ───
-  // Se alguém digitar uma URL que não existe (ex: /batata), 
-  // o sistema joga a pessoa de volta para a Home em vez de quebrar a tela.
-  { path: '**', redirectTo: 'home' }
+  { path: '**', redirectTo: 'home' },
+  { path: 'admin', component: AdminDashboardComponent },
+  { path: 'catalogo', component: AdminDashboardComponent }, // ⚠️ Substitua depois
+  { path: 'estoque', component: AdminDashboardComponent },  // ⚠️ Substitua depois
+  { path: 'informacoes', component: AdminDashboardComponent },
 ];

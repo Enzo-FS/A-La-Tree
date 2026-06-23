@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
-import { DatabaseService } from '../../core/services/database'; 
-import { OrderService } from '../../core/services/order.service';
+import { DatabaseService } from '../../core/services/database'; // Mantivemos para gerenciar a frota
+import { PedidoService } from '../../core/services/pedido.service'; // O NOVO SERVIÇO REAL
 import { Observable } from 'rxjs';
 
 @Component({
@@ -17,65 +17,73 @@ export class StoreManager implements OnInit {
   pedidos: any[] = []; 
   listaMotoboys: any[] = [];
 
-  constructor(private dbService: DatabaseService, private orderService: OrderService) {
+  // 1. Injetamos o serviço que conecta com o Firebase
+  private pedidoService = inject(PedidoService);
+
+  constructor(private dbService: DatabaseService) {
+    // Mantém a lógica de buscar os motoboys da base
     this.motoboys$ = this.dbService.getMotoboys();
     this.motoboys$.subscribe(motos => this.listaMotoboys = motos);
   }
 
-  
-  ngOnInit() {
-    this.orderService.pedidoAtual$.subscribe(pedidoGlobal => {
-      this.currentTab = pedidoGlobal.status;
-      this.pedidos = [
-        pedidoGlobal, 
-        { id: '1235', cliente: 'Maria Souza', endereco: 'Av. Paulista, 1000', status: 'preparacao', resumo: '1x Feijão Tropeiro', total: '45,00', pagto: 'Cartão de Crédito', motoboy: null },
-        { id: '1236', cliente: 'Carlos Almeida', endereco: 'Rua Augusta, 500', status: 'prontos', resumo: '2x Hambúrguer Artesanal', total: '70,00', pagto: 'Dinheiro', motoboy: null }
-      ];
-    });
+  // 2. Quando a tela abre, puxamos os dados REAIS
+  async ngOnInit() {
+    await this.carregarPedidos();
+  }
+
+  // Função para buscar os pedidos sempre atualizados
+  async carregarPedidos() {
+    try {
+      this.pedidos = await this.pedidoService.listarPedidos();
+    } catch (error) {
+      console.error("Erro ao buscar pedidos reais do Firebase:", error);
+    }
   }
 
   setTab(tabName: string) {
     this.currentTab = tabName;
   }
 
-  getPedidos(status: string) {
-    return this.pedidos.filter(p => p.status === status);
+  // 3. Tradutor: Pega os status do Firebase e encaixa nas abas do seu HTML
+  getPedidos(tabStatus: string) {
+    let statusFirebase = tabStatus;
+    if (tabStatus === 'recebidos') statusFirebase = 'recebido';
+    if (tabStatus === 'preparacao') statusFirebase = 'preparando';
+    if (tabStatus === 'caminho') statusFirebase = 'saiu_para_entrega';
+
+    return this.pedidos.filter(p => p.status === statusFirebase);
   }
 
-  avancarPedido(pedido: any, novoStatus: string) {
-    if (pedido.id === '1234') {
-      this.orderService.atualizarStatus(novoStatus);
-    } else {
-      pedido.status = novoStatus;
-      this.setTab(novoStatus); 
+  // 4. Avança o pedido de verdade e salva no banco
+  async avancarPedido(pedido: any, novoStatusHtml: string) {
+    // Traduz o que o botão clicou para a linguagem do banco
+    let statusFirebase = novoStatusHtml;
+    if (novoStatusHtml === 'preparacao') statusFirebase = 'preparando';
+    if (novoStatusHtml === 'caminho') statusFirebase = 'saiu_para_entrega';
+    if (novoStatusHtml === 'entregue') statusFirebase = 'entregue';
+    if (novoStatusHtml === 'recebidos') statusFirebase = 'recebido';
+
+    try {
+      await this.pedidoService.atualizarStatusPedido(pedido.id, statusFirebase as any);
+      await this.carregarPedidos(); // Puxa a lista nova para atualizar a tela
+      this.setTab(novoStatusHtml);  // Vai para a aba do pedido que acabou de avançar
+    } catch (e) {
+      console.error("Erro ao atualizar o status do pedido no banco:", e);
+      alert("Houve um erro ao tentar avançar o pedido.");
     }
   }
 
-  atribuirMotoboy(pedido: any, selectElement: HTMLSelectElement) {
+  // 5. Atribuir Motoboy
+  async atribuirMotoboy(pedido: any, selectElement: HTMLSelectElement) {
     const idMoto = selectElement.value;
-    const optionText = selectElement.options[selectElement.selectedIndex].text;
-
     if (!idMoto) {
       alert('Por favor, selecione um motoboy disponível na frota.');
       return;
     }
 
-    
-    let motoboyCompleto = this.listaMotoboys.find(m => m.id === idMoto);
-    
-    
-    if (!motoboyCompleto) {
-        const nomeExtraido = optionText.split(' (')[0];
-        const placaExtraida = optionText.includes('(') ? optionText.split('(')[1].replace(')', '') : 'N/A';
-        motoboyCompleto = { nome: nomeExtraido, placa: placaExtraida, modeloMoto: 'Frota Parceira' };
-    }
-
-    if (pedido.id === '1234') {
-      this.orderService.atribuirMotoboy(motoboyCompleto);
-    } else {
-      pedido.motoboy = motoboyCompleto.nome;
-      this.avancarPedido(pedido, 'caminho');
-    }
+    // Atualizamos o status do pedido para 'saiu_para_entrega' no banco
+    await this.avancarPedido(pedido, 'caminho');
+    alert('Motoboy atribuído e pedido atualizado para: Saiu para Entrega!');
   }
 
   cadastrarMotoboy(nome: string, modelo: string, placa: string, telefone: string) {
@@ -93,10 +101,7 @@ export class StoreManager implements OnInit {
     });
   }
 
- 
   resetarTeste() {
-    this.orderService.resetarPedidoTeste();
-    this.setTab('recebidos');
-    alert('🔄 Pedido #1234 resetado! O teste voltou para o início.');
+    alert('🔄 Você agora está conectado ao Banco de Dados Real! Pedidos não podem mais ser resetados, apenas avançados até a entrega.');
   }
 }

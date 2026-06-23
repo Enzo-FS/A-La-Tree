@@ -1,20 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, addDoc, onSnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { FIRESTORE_MOTOBOY } from './firestore-motoboy.token';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-  private firestore: Firestore = inject(Firestore);
+  // 👇 A ÚNICA LINHA QUE MUDOU: Trocamos inject(Firestore) por inject(FIRESTORE_MOTOBOY)
+  private firestore: Firestore = inject(FIRESTORE_MOTOBOY);
 
-  // 1. Função de Gravar (Mantida igual, pois já vimos que funciona!)
+  // 1. Função de Gravar (Mantida igual)
   addMotoboy(dados: any) {
     const motoboysRef = collection(this.firestore, 'motoboys');
     return addDoc(motoboysRef, dados);
   }
 
-  // 2. Função de Ler (A SOLUÇÃO DEFINITIVA)
+  // 2. Função de Ler (Mantida igual)
   getMotoboys(): Observable<any[]> {
     const motoboysRef = collection(this.firestore, 'motoboys');
     
