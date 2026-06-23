@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppStateService, FOODS, DAYS_MENU } from '../../../core/services/app-state.service';
 import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 import { FoodCardComponent } from '../food-card/food-card.component';
-import { Router } from '@angular/router'; // Lá nos imports
-import { inject } from '@angular/core';
-
+import { Router } from '@angular/router';
 
 const DAYS = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
@@ -77,8 +75,9 @@ interface DayPill { label: string; num: number; isToday: boolean; index: number;
     </div>
   `,
   styles: [`
-    .home-screen { background: var(--bg); min-height: 100vh; padding-bottom: 6rem; display: flex; flex-direction: column; }
-    .home-header { background: var(--white); padding: 3.5rem 1.25rem 1.25rem; }
+    /* CSS blindado com as travas de responsividade do celular */
+    .home-screen { background: var(--bg); min-height: 100dvh; width: 100%; display: flex; flex-direction: column; padding-bottom: 90px; box-sizing: border-box; overflow-x: hidden; }
+    .home-header { background: var(--white); padding: 3.5rem 1.25rem 1.25rem; width: 100%; box-sizing: border-box; }
     .home-header h2 { font-size: 1.4rem; font-weight: 800; color: var(--gray-800); }
     .home-header h2 span { color: var(--orange); }
     .home-header p { color: var(--gray-400); font-size: 0.8rem; margin-top: 0.25rem; }
@@ -86,7 +85,7 @@ interface DayPill { label: string; num: number; isToday: boolean; index: number;
     .guest-banner > span { font-size: 1.3rem; flex-shrink: 0; }
     .gb-text strong { display: block; font-weight: 700; margin-bottom: 0.1rem; }
     .gb-login { background: none; border: none; font-weight: 700; color: var(--orange); cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.78rem; padding: 0; text-decoration: underline; margin-top: 0.2rem; }
-    .calendar-strip { background: var(--white); padding: 1rem 1.25rem 1.25rem; margin-top: 2px; }
+    .calendar-strip { background: var(--white); padding: 1rem 1.25rem 1.25rem; margin-top: 2px; width: 100%; box-sizing: border-box; }
     .strip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
     .strip-header span { font-size: 0.82rem; font-weight: 600; color: var(--gray-800); }
     .strip-header em { font-style: normal; font-size: 0.72rem; font-weight: 600; color: var(--orange); }
@@ -101,14 +100,14 @@ interface DayPill { label: string; num: number; isToday: boolean; index: number;
     .day-pill:active { transform: scale(0.93); }
     .day-pill.has-special::after { content: '•'; display: block; font-size: 0.5rem; color: var(--orange); line-height: 1; margin-top: 2px; }
     .day-pill.today.has-special::after { color: rgba(255,255,255,0.8); }
-    .section-block { background: var(--white); padding: 1rem 1.25rem; margin-top: 0.5rem; }
+    .section-block { background: var(--white); padding: 1rem 1.25rem; margin-top: 0.5rem; width: 100%; box-sizing: border-box; }
     .section-block h3 { font-size: 0.82rem; font-weight: 600; color: var(--gray-800); margin-bottom: 0.85rem; }
     .categories { display: flex; justify-content: space-between; gap: 0.5rem; }
     .cat-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer; }
     .cat-icon { width: 3.25rem; height: 3.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: var(--gray-100); border: 2px solid transparent; transition: all 0.15s; }
-    .cat-icon.highlight { background: var(--orange-light); border-color: var(--orange); }
+    .cat-icon.highlight { background: var(--orange-lite); border-color: var(--orange); }
     .cat-btn span { font-size: 0.68rem; font-weight: 500; color: var(--gray-700); }
-    .popular-section { padding: 1rem 1.25rem; margin-top: 0.5rem; }
+    .popular-section { padding: 1rem 1.25rem; margin-top: 0.5rem; width: 100%; box-sizing: border-box; }
     .sec-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
     .sec-row h3 { font-size: 0.82rem; font-weight: 600; color: var(--gray-800); }
     .sec-row button { background: none; border: none; color: var(--orange); font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; }
@@ -122,11 +121,17 @@ export class HomeComponent implements OnInit {
   days = DAYS;
   weekDays: DayPill[] = [];
   calRange = '';
-  popularFoods = FOODS.slice(0, 4);
   greeting = '';
   displayName = '';
 
-  constructor(public state: AppStateService) {}
+  public state = inject(AppStateService);
+  private router = inject(Router);
+
+  // 👇 A MÁGICA 1: Trocamos a variável fixa por um 'get'. 
+  // Agora o Angular vigia o FOODS em tempo real!
+  get popularFoods() {
+    return FOODS.slice(0, 4);
+  }
 
   ngOnInit(): void {
     this.buildWeek();
@@ -153,7 +158,7 @@ export class HomeComponent implements OnInit {
     });
     this.calRange = `${this.weekDays[0].num}-${this.weekDays[6].num} (7 Dias)`;
   }
-  private router = inject(Router);
+  
   nav(filter: string): void { this.state.setFilter(filter); this.router.navigate(['/explorar']); }
   navAll(): void { this.state.setFilter('Todos'); this.router.navigate(['/explorar']); }
 

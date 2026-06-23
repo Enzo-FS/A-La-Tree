@@ -101,4 +101,13 @@ export class PedidoService {
     };
     return map[status] ?? status;
   }
+  async atribuirMotoboy(pedidoId: string, nomeMotoboy: string) {
+    const pedidoRef = doc(this.firestore, 'pedidos', pedidoId);
+    
+    // Atualiza o documento adicionando o nome da moto e mudando o status
+    await updateDoc(pedidoRef, {
+      motoboy: nomeMotoboy,
+      status: 'saiu_para_entrega'
+    });
+  }
 }

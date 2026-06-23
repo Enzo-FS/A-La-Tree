@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppStateService, FILTERS } from '../../../core/services/app-state.service';
+import { AppStateService, FILTERS, FOODS } from '../../../core/services/app-state.service';
 import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 import { FoodCardComponent } from '../food-card/food-card.component';
 import { Router } from '@angular/router';
-import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-explore',
@@ -35,25 +34,41 @@ import { inject } from '@angular/core';
     </div>
   `,
   styles: [`
-    .explore-screen { background: var(--bg); min-height: 100vh; padding-bottom: 6rem; display: flex; flex-direction: column; }
-    .filter-bar { background: var(--white); padding: 0.5rem 1.25rem 1rem; display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; }
+    /* CSS blindado com as travas de responsividade do celular */
+    .explore-screen { background: var(--bg); min-height: 100dvh; width: 100%; display: flex; flex-direction: column; padding-bottom: 90px; box-sizing: border-box; overflow-x: hidden; }
+    .filter-bar { background: var(--white); padding: 0.5rem 1.25rem 1rem; display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; width: 100%; box-sizing: border-box; }
     .filter-bar::-webkit-scrollbar { display: none; }
     .chip { padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.72rem; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: 'Poppins', sans-serif; }
     .chip.active { background: var(--orange); color: #fff; }
     .chip:not(.active) { background: var(--gray-100); color: #666; }
-    .explore-list { padding: 1rem 1.25rem; }
+    .explore-list { padding: 1rem 1.25rem; width: 100%; box-sizing: border-box; }
     .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem 0; color: var(--gray-400); gap: 0.75rem; }
     .empty-state span { font-size: 3.5rem; }
     .empty-state p { font-size: 0.85rem; }
   `],
 })
-export class ExploreComponent {
+export class ExploreComponent implements OnInit {
   filters = FILTERS;
-  get filtered() { return this.state.filteredFoods(); }
-  constructor(public state: AppStateService) {}
-
+  
+  public state = inject(AppStateService);
   private router = inject(Router);
+
+  // 👇 A MÁGICA 2: Vigia a lista crua no exato segundo do carregamento!
+  get filtered() { 
+    const filtroAtual = this.state.exploreFilter();
+    
+    if (filtroAtual === 'Todos') {
+        return FOODS; // Se for 'Todos', entrega a lista direto do banco em tempo real!
+    }
+    
+    return this.state.filteredFoods(); 
+  }
+
+  ngOnInit() {
+    this.state.setFilter('Todos');
+  }
+
   irPara(rota: string) {
     this.router.navigate([rota]);
   }

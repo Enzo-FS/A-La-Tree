@@ -56,34 +56,50 @@ export class StoreManager implements OnInit {
 
   // 4. Avança o pedido de verdade e salva no banco
   async avancarPedido(pedido: any, novoStatusHtml: string) {
-    // Traduz o que o botão clicou para a linguagem do banco
     let statusFirebase = novoStatusHtml;
+    
+    // Tradutor do painel para o Firebase
     if (novoStatusHtml === 'preparacao') statusFirebase = 'preparando';
     if (novoStatusHtml === 'caminho') statusFirebase = 'saiu_para_entrega';
-    if (novoStatusHtml === 'entregue') statusFirebase = 'entregue';
     if (novoStatusHtml === 'recebidos') statusFirebase = 'recebido';
+    // Se for 'entregue', o statusFirebase já será 'entregue' corretamente!
 
     try {
       await this.pedidoService.atualizarStatusPedido(pedido.id, statusFirebase as any);
-      await this.carregarPedidos(); // Puxa a lista nova para atualizar a tela
-      this.setTab(novoStatusHtml);  // Vai para a aba do pedido que acabou de avançar
+      await this.carregarPedidos(); 
+      
+      // 👇 A MÁGICA AQUI: Evita que a aba resete e fique em branco!
+      if (statusFirebase === 'entregue') {
+          alert('✅ Pedido entregue e finalizado com sucesso!');
+          this.setTab('caminho'); // Fica na mesma aba (que agora mostrará a fila andando)
+      } else {
+          this.setTab(novoStatusHtml);  
+      }
     } catch (e) {
       console.error("Erro ao atualizar o status do pedido no banco:", e);
-      alert("Houve um erro ao tentar avançar o pedido.");
     }
   }
 
   // 5. Atribuir Motoboy
-  async atribuirMotoboy(pedido: any, selectElement: HTMLSelectElement) {
-    const idMoto = selectElement.value;
-    if (!idMoto) {
+  async atribuirMotoboy(pedido: any, nomeMoto: string) {
+    if (!nomeMoto) {
       alert('Por favor, selecione um motoboy disponível na frota.');
       return;
     }
 
-    // Atualizamos o status do pedido para 'saiu_para_entrega' no banco
-    await this.avancarPedido(pedido, 'caminho');
-    alert('Motoboy atribuído e pedido atualizado para: Saiu para Entrega!');
+    try {
+      // 👇 Agora a tela pede para o serviço fazer o trabalho sujo!
+      await this.pedidoService.atribuirMotoboy(pedido.id, nomeMoto);
+
+      // Atualiza a tela após salvar
+      await this.carregarPedidos();
+      this.setTab('caminho');
+      alert(`O entregador ${nomeMoto} foi atribuído com sucesso!`);
+      
+    } catch (e) {
+      console.error("Erro ao atribuir motoboy:", e);
+      alert("Houve um erro ao tentar salvar o motoboy. Tente novamente.");
+    }
   }
 
   cadastrarMotoboy(nome: string, modelo: string, placa: string, telefone: string) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router'; // 👈 IMPORTAÇÃO NOVA
+import { ActivatedRoute } from '@angular/router';
 import { AppStateService } from '../../core/services/app-state.service';
 import { PedidoService } from '../../core/services/pedido.service';
 import { Firestore, doc, onSnapshot } from '@angular/fire/firestore'; 
@@ -10,7 +10,7 @@ import { Firestore, doc, onSnapshot } from '@angular/fire/firestore';
   selector: 'app-customer-tracking',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './customer-tracking.html',
+  templateUrl: './customer-tracking.html', // 👈 Apontando pro HTML correto
   styleUrl: './customer-tracking.css'
 })
 export class CustomerTracking implements OnInit, OnDestroy {
@@ -25,14 +25,12 @@ export class CustomerTracking implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private firestore = inject(Firestore); 
   private zone = inject(NgZone); 
-  private route = inject(ActivatedRoute); // 👈 INJEÇÃO DA ROTA
+  private route = inject(ActivatedRoute); 
 
   private escutaDoFirebase: any; 
 
   async ngOnInit() {
-    // Verifica se a URL trouxe um ID específico (ex: /pedido/abc123D)
     const pedidoId = this.route.snapshot.paramMap.get('id');
-    
     if (pedidoId) {
       await this.carregarPedidoEspecifico(pedidoId);
     } else {
@@ -40,17 +38,15 @@ export class CustomerTracking implements OnInit, OnDestroy {
     }
   }
 
-  // 1. CARREGA UM PEDIDO ESPECÍFICO DO HISTÓRICO
   async carregarPedidoEspecifico(id: string) {
     try {
       const pedidoRef = doc(this.firestore, 'pedidos', id);
-      
-      // Conecta o radar direto no ID que veio do histórico
       this.escutaDoFirebase = onSnapshot(pedidoRef, (docSnap) => {
         if (docSnap.exists()) {
           this.zone.run(() => {
             this.pedidoReal = { id: docSnap.id, ...docSnap.data() };
             this.atualizarInterface();
+            this.cdr.detectChanges(); 
           });
         }
       });
@@ -59,7 +55,6 @@ export class CustomerTracking implements OnInit, OnDestroy {
     }
   }
 
-  // 2. CARREGA O ÚLTIMO (Lógica original mantida intacta)
   async carregarMeuUltimoPedido() {
     const user = this.state.user();
     if (!user || !user.id) return;
@@ -69,10 +64,8 @@ export class CustomerTracking implements OnInit, OnDestroy {
       if (pedidos && pedidos.length > 0) {
         const pedidosMaisNovos = pedidos.reverse(); 
         let pedidoAtivo = pedidosMaisNovos.find((p: any) => p.status !== 'entregue');
-        
         let pedidoAlvo = pedidoAtivo || pedidosMaisNovos[0];
         
-        // 👇 A CORREÇÃO: Essa linha acalma o TypeScript, garantindo que o ID existe!
         if (pedidoAlvo && pedidoAlvo.id) {
           await this.carregarPedidoEspecifico(pedidoAlvo.id);
         }
@@ -82,7 +75,6 @@ export class CustomerTracking implements OnInit, OnDestroy {
     }
   }
 
-  // ... (TODO O RESTO DO CÓDIGO CONTINUA EXATAMENTE IGUAL)
   atualizarInterface() {
     this.atualizarCronometro(this.pedidoReal?.status || '');
     this.atualizarMapa(this.pedidoReal?.enderecoEntrega || '');
@@ -99,6 +91,7 @@ export class CustomerTracking implements OnInit, OnDestroy {
     if (!status) return -1;
     if (status === 'recebido') return 0;
     if (status === 'preparando') return 1;
+    if (status === 'prontos') return 2; 
     if (status === 'saiu_para_entrega') return 3; 
     if (status === 'entregue') return 4;
     return 0;
@@ -107,6 +100,7 @@ export class CustomerTracking implements OnInit, OnDestroy {
   atualizarCronometro(status: string) { 
     if (status === 'recebido') this.etaText = '40 a 50 min';
     else if (status === 'preparando') this.etaText = '20 a 30 min';
+    else if (status === 'prontos') this.etaText = 'Aguardando Entregador';
     else if (status === 'saiu_para_entrega') this.etaText = '10 a 15 min';
     else this.etaText = 'Concluído';
   }

@@ -32,6 +32,7 @@
     @switch (pedidoReal?.status) {
       @case ('recebido') { Aguardando Confirmação }
       @case ('preparando') { Em Preparação }
+      @case ('prontos') { Pedido Pronto }
       @case ('saiu_para_entrega') { Retirado pelo Motoboy }
       @case ('entregue') { Pedido Entregue }
       @default { Carregando... }
@@ -55,7 +56,7 @@
         <div class="vtl-content"><p class="vtl-title">Preparando</p></div>
       </div>
 
-      <div class="vtl-item" [class.done]="getNivelStatus(pedidoReal?.status) > 2">
+      <div class="vtl-item" [class.done]="getNivelStatus(pedidoReal?.status) > 2" [class.active]="pedidoReal?.status === 'prontos'">
         <div class="vtl-icon"><svg width="22" height="22" viewBox="0 0 22 22"><rect x="5" y="11" width="12" height="7" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 11V8.5a3 3 0 016 0V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
         <div class="vtl-connector" [class.done]="getNivelStatus(pedidoReal?.status) > 2"></div>
         <div class="vtl-content"><p class="vtl-title">Pedido pronto</p></div>
@@ -129,7 +130,7 @@
         </button>
       } @else {
         <div style="text-align: center; background: #F3F4F6; padding: 10px; border-radius: 8px; border: 1px dashed #D1D5DB;">
-          <span style="font-size: 9px; color: #6B7280; font-weight: bold; text-transform: uppercase;">Bloqueado: Em Rota</span>
+          <span style="font-size: 9px; color: #6B7280; font-weight: bold; text-transform: uppercase;">Bloqueado: Em Rota/Entregue</span>
         </div>
       }
     </div>
@@ -148,18 +149,22 @@
     <ul class="order-items">
       @for (item of pedidoReal?.itens; track $index) {
         <li class="order-item">
-          <span class="item-qty">{{ item.qty || item.quantidade || 1 }}x</span>
-          <span class="item-name">{{ item.food?.name || item.nome || 'Produto' }}</span>
+          <span class="item-qty">{{ item?.qty || item?.quantidade || item?.quantity || 1 }}x</span>
+          <span class="item-name">{{ item?.food?.name || item?.nome || item?.name || item?.produto || 'Produto' }}</span>
         </li>
       }
     </ul>
     
     <div class="order-totals">
-      <p style="font-size: 12px; font-weight: bold;">Pagamento via: <span style="text-transform: uppercase; color: #E27E0C;">{{ pedidoReal?.formaPagamento || 'N/A' }}</span></p>
+      <p style="font-size: 12px; font-weight: bold;">Pagamento via: 
+        <span style="text-transform: uppercase; color: #E27E0C;">
+          {{ pedidoReal?.formaPagamento === 'entrega' ? 'Pagar na Entrega' : pedidoReal?.formaPagamento || 'N/A' }}
+        </span>
+      </p>
+      <hr>
       <div class="total-row grand"><span>Total</span><span>R$ {{ pedidoReal?.valorTotal || '0,00' }}</span></div>
     </div>
   </section>
 
-  <section class="section support-section">
-    </section>
+  <section class="section support-section"></section>
 </main>

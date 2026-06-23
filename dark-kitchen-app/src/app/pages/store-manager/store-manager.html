@@ -1,19 +1,12 @@
 <header class="store-header">
   <div class="store-header-inner">
     <span class="header-title">Gerenciamento de Pedido</span>
-    <div class="header-logo">
-      <img src="https://i.imgur.com/nKQluiG.png" alt="logo">
-    </div>
+    <div class="header-logo"><img src="https://i.imgur.com/nKQluiG.png" alt="logo"></div>
   </div>
 </header>
 
 <main class="store-main">
-  <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px;">
-  <h1 class="page-title" style="margin: 0;">Central de Gerenciamento</h1>
-  <button (click)="resetarTeste()" style="background: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #dc2626; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2); transition: transform 0.1s;">
-    🔄 Resetar Teste
-  </button>
-</div>
+  
 
   <nav class="status-tabs">
     <button class="tab-btn" [class.active]="currentTab === 'recebidos'" (click)="setTab('recebidos')">Recebidos</button>
@@ -26,16 +19,22 @@
   <section class="tab-content" [class.active]="currentTab === 'recebidos'">
     @for (pedido of getPedidos('recebidos'); track pedido.id) {
       <div class="order-card">
-        <div class="oc-header">
-          <span class="oc-number">#{{ pedido.id }}</span>
-        </div>
+        <div class="oc-header"><span class="oc-number">#{{ (pedido.id | slice:0:6) }}</span></div>
         <div class="oc-body">
-          <p class="oc-client"><strong>Cliente:</strong> {{ pedido.cliente }}</p>
-          <p class="oc-address"><strong>Local:</strong> {{ pedido.endereco }}</p>
-          <p><strong>Resumo:</strong> {{ pedido.resumo }}</p>
+          <p class="oc-client"><strong>Cliente:</strong> {{ pedido.clienteNome || 'Visitante' }}</p>
+          <p class="oc-address"><strong>Local:</strong> {{ pedido.enderecoEntrega || 'Retirada no Local' }}</p>
+          
+          <p><strong>Resumo:</strong> 
+            @for (item of pedido.itens; track $index) {
+              {{ item?.qty || item?.quantidade || item?.quantity || 1 }}x {{ item?.food?.name || item?.nome || item?.name || item?.produto || 'Item' }}@if (!$last) { , }
+            }
+          </p>
+          
           <div class="oc-financial">
-            <span>{{ pedido.pagto }}</span>
-            <span class="oc-total">R$ {{ pedido.total }}</span>
+            <span style="text-transform: uppercase; font-weight: bold;">
+              {{ pedido.formaPagamento === 'entrega' ? 'Na Entrega' : pedido.formaPagamento }}
+            </span>
+            <span class="oc-total">R$ {{ pedido.valorTotal || '0,00' }}</span>
           </div>
         </div>
         <div class="oc-actions split">
@@ -43,127 +42,88 @@
           <button class="btn-action btn-success" (click)="avancarPedido(pedido, 'preparacao')">Aceitar Pedido</button>
         </div>
       </div>
-    } @empty {
-      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido novo no momento.</p>
-    }
+    } @empty { <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido novo no momento.</p> }
   </section>
 
   <section class="tab-content" [class.active]="currentTab === 'preparacao'">
     @for (pedido of getPedidos('preparacao'); track pedido.id) {
       <div class="order-card preparing">
-        <div class="oc-header">
-          <span class="oc-number">#{{ pedido.id }}</span>
-        </div>
+        <div class="oc-header"><span class="oc-number">#{{ (pedido.id | slice:0:6) }}</span></div>
         <div class="oc-body">
           <div class="status-badge preparing-badge">Cozinha</div>
-          <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
-          <p><strong>Itens:</strong> {{ pedido.resumo }}</p>
+          <p><strong>Cliente:</strong> {{ pedido.clienteNome || 'Visitante' }}</p>
+          <p><strong>Itens:</strong> 
+            @for (item of pedido.itens; track $index) {
+              {{ item?.qty || item?.quantidade || item?.quantity || 1 }}x {{ item?.food?.name || item?.nome || item?.name || item?.produto || 'Item' }}@if (!$last) { <br> }
+            }
+          </p>
         </div>
         <div class="oc-actions full">
           <button class="btn-action btn-orange" (click)="avancarPedido(pedido, 'prontos')">Marcar como Pronto</button>
         </div>
       </div>
-    } @empty {
-      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido na cozinha.</p>
-    }
+    } @empty { <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido na cozinha.</p> }
   </section>
 
   <section class="tab-content" [class.active]="currentTab === 'prontos'">
     @for (pedido of getPedidos('prontos'); track pedido.id) {
       <div class="order-card ready">
-        <div class="oc-header">
-          <span class="oc-number">#{{ pedido.id }}</span>
-        </div>
+        <div class="oc-header"><span class="oc-number">#{{ (pedido.id | slice:0:6) }}</span></div>
         <div class="oc-body">
-          <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
-          <p><strong>Local:</strong> {{ pedido.endereco }}</p>
-          
+          <p><strong>Cliente:</strong> {{ pedido.clienteNome || 'Visitante' }}</p>
+          <p><strong>Local:</strong> {{ pedido.enderecoEntrega || 'Retirada no Local' }}</p>
           <div style="margin-top: 15px;">
             <label style="color: black; font-size: 14px; margin-bottom: 5px; display: block;">Selecione o Entregador:</label>
             
-            <select #selectMoto style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: white; color: black; cursor: pointer;">
-              
+            <select (change)="pedido.motoboySelecionado = $any($event.target).value" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: white; color: black; cursor: pointer;">
+              <option value="">-- Selecione o Entregador --</option>
               @if (motoboys$ | async; as listaDeMotoboys) {
-                <option value="">-- Frota Disponível ({{ listaDeMotoboys.length }} encontrados) --</option>
-                
                 @for (moto of listaDeMotoboys; track moto.id) {
-                  <option [value]="moto.id">{{ moto.nome }} ({{ moto.placa }})</option>
+                  <option [value]="moto.nome">{{ moto.nome }} ({{ moto.placa }})</option>
                 }
-              } @else {
-                <option value="">⏳ Carregando conexão com o banco...</option>
               }
-              
             </select>
           </div>  
-
         </div>
         <div class="oc-actions full">
-          <button class="btn-action btn-blue" (click)="atribuirMotoboy(pedido, selectMoto)">Atribuir e Enviar</button>
+          <button class="btn-action btn-blue" (click)="atribuirMotoboy(pedido, pedido.motoboySelecionado)">Atribuir e Enviar</button>
         </div>
       </div>
-    } @empty {
-      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido aguardando retirada.</p>
-    }
+    } @empty { <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum pedido aguardando retirada.</p> }
   </section>
 
   <section class="tab-content" [class.active]="currentTab === 'caminho'">
     @for (pedido of getPedidos('caminho'); track pedido.id) {
       <div class="order-card on-way">
-        <div class="oc-header">
-          <span class="oc-number">#{{ pedido.id }}</span>
-        </div>
+        <div class="oc-header"><span class="oc-number">#{{ (pedido.id | slice:0:6) }}</span></div>
         <div class="oc-body">
           <div style="background: rgb(255, 255, 255); padding: 10px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #4ade80;">
-            <strong style="color: #4ade80;">Motoboy em trânsito:</strong><br><br> {{ pedido.motoboy }}
+            <strong style="color: #4ade80;">Motoboy em trânsito:</strong><br><br> {{ pedido.motoboy || 'Entregador Parceiro' }}
           </div>
-          <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
-          <p><strong>Local:</strong> {{ pedido.endereco }}</p>
+          <p><strong>Cliente:</strong> {{ pedido.clienteNome || 'Visitante' }}</p>
+          <p><strong>Local:</strong> {{ pedido.enderecoEntrega || 'Retirada no Local' }}</p>
         </div>
         <div class="oc-actions full">
-          <button class="btn-action btn-success" (click)="avancarPedido(pedido, 'entregues')">Confirmar Entrega</button>
-        </div>
+        <button class="btn-action btn-success" (click)="avancarPedido(pedido, 'entregue')">Confirmar Entrega</button>
       </div>
-    } @empty {
-      <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum motoboy na rua no momento.</p>
-    }
-  </section>
-
+    </div>
+  } @empty { <p style="color: rgb(0, 0, 0); opacity: 0.7;">Nenhum motoboy na rua no momento.</p> }
+</section>
 
   <section class="tab-content" [class.active]="currentTab === 'motoboys'">
-  <div class="order-card">
-    <div class="oc-header">
-      <span class="oc-number">Cadastro de Frota</span>
-    </div>
-    
-    <div class="oc-body">
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
-        <div class="oc-info-row">
-          <span class="oc-label">Nome Completo</span>
-          <input #nomeMoto type="text" placeholder="Ex: Thiago Silva" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);">
+    <div class="order-card">
+      <div class="oc-header"><span class="oc-number">Cadastro de Frota</span></div>
+      <div class="oc-body">
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+          <div class="oc-info-row"><span class="oc-label">Nome</span><input #nomeMoto type="text" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);"></div>
+          <div class="oc-info-row"><span class="oc-label">Modelo</span><input #modeloMoto type="text" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);"></div>
+          <div class="oc-info-row"><span class="oc-label">Placa</span><input #placaMoto type="text" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0); text-transform: uppercase;"></div>
+          <div class="oc-info-row"><span class="oc-label">Telefone</span><input #telefoneMoto type="text" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);"></div>
         </div>
-
-        <div class="oc-info-row">
-          <span class="oc-label">Modelo do Veículo</span>
-          <input #modeloMoto type="text" placeholder="Ex: Honda CG 160" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);">
-        </div>
-
-        <div class="oc-info-row">
-          <span class="oc-label">Placa</span>
-          <input #placaMoto type="text" placeholder="Ex: ABC-1234" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0); text-transform: uppercase;">
-        </div>
-
-        <div class="oc-info-row">
-          <span class="oc-label">Telefone (WhatsApp)</span>
-          <input #telefoneMoto type="text" placeholder="(11) 99999-9999" style="padding: 12px; border-radius: 6px; border: 1px solid var(--gray); background: var(--surface); color: rgb(0, 0, 0);">
-        </div>
+      </div>  
+      <div class="oc-actions full" style="margin-top: 20px;">
+        <button class="btn-action btn-blue" (click)="cadastrarMotoboy(nomeMoto.value, modeloMoto.value, placaMoto.value, telefoneMoto.value)">Registrar Motoboy</button>
       </div>
-    </div>  
-
-    <div class="oc-actions full" style="margin-top: 20px;">
-      <button class="btn-action btn-blue" (click)="cadastrarMotoboy(nomeMoto.value, modeloMoto.value, placaMoto.value, telefoneMoto.value)">
-        Registrar Motoboy
-      </button>
     </div>
-  </div>
-</section>
+  </section>
 </main>

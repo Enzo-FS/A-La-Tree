@@ -130,15 +130,22 @@ export class AppStateService {
     
     try {
       // 👑 1. Interceptador de Administrador
-      if (email === 'adminloja' && pass === 'loja') {
+      if (email === 'loja' && pass === 'loja') {
         this.user.set({ id: 'admin_id', name: 'Painel Gerencial', email: 'adminloja' });
         this.isGuest.set(false);
         this.router.navigate(['/painel']); // Redireciona para o StoreManager
         return null;
       }
 
+      if (email === 'finan' && pass === 'finan') {
+        this.user.set({ id: 'finan_id', name: 'Financ', email: 'Finloja' });
+        this.isGuest.set(false);
+        window.location.href = 'https://gerencia-a-la-tree.web.app/';
+        return null;
+      }
+
       // 🛵 2. Interceptador de Motoboy
-      if (email === 'Motoca' && pass === 'motoca123') {
+      if (email === 'Motoca' && pass === 'motoca') {
         this.user.set({ id: 'motoboy_id', name: 'Painel Motoboy', email: 'Motoca' });
         this.isGuest.set(false);
         this.router.navigate(['/motoboy']); // Redireciona para o DriverPanel
