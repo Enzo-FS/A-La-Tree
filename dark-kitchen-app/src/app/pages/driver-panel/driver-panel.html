@@ -11,12 +11,12 @@
       @case ('prontos') {
         <div class="driver-card alert">
           <div class="card-top">
-            <span class="order-id">Pedido #{{ pedido.id }}</span>
+            <span class="order-id">Pedido #{{ (pedido.id | slice:0:6) }}</span>
             <span class="badge yellow">Pronto para Retirada</span>
           </div>
-          <p class="instruction">Vá até a cozinha buscar este pedido.</p>
-          <div class="info-row">
-            <strong>Resumo:</strong> <span>{{ pedido.resumo }}</span>
+          <p class="instruction">Vá até a loja buscar este pedido.</p>
+          <div class="info-row" style="margin-top: 10px;">
+            <strong>Local de Entrega:</strong> <span>{{ pedido.enderecoEntrega }}</span>
           </div>
           <button class="btn-driver accept" (click)="iniciarEntrega()">
             🏍️ Coletei e Estou a Caminho
@@ -24,36 +24,30 @@
         </div>
       }
 
-      @case ('caminho') {
+      @case ('saiu_para_entrega') {
         <div class="driver-card active">
           <div class="card-top">
-            <span class="order-id">Pedido #{{ pedido.id }}</span>
+            <span class="order-id">Pedido #{{ (pedido.id | slice:0:6) }}</span>
             <span class="badge green">Em Rota de Entrega</span>
           </div>
           
           <div class="delivery-address-box">
             <h3>Endereço do Cliente</h3>
-            <p class="main-address"><strong>{{ pedido.rua }}, {{ pedido.numero }}</strong></p>
-            <p class="sub-address">{{ pedido.bairro }} - CEP: {{ pedido.cep }}</p>
-            @if (pedido.obs) {
-              <p class="driver-obs">⚠️ Obs: {{ pedido.obs }}</p>
-            }
+            <p class="main-address"><strong>{{ pedido.enderecoEntrega }}</strong></p>
           </div>
 
           <div class="financial-strip">
             <div>
               <span class="label">Forma de Pgto:</span>
-              <strong>{{ pedido.pagto || 'PIX' }}</strong>
+              <strong style="text-transform: uppercase;">{{ pedido.formaPagamento === 'entrega' ? 'Na Entrega' : pedido.formaPagamento }}</strong>
             </div>
-            <div>
-              <span class="label">Total a Receber:</span>
-              <strong class="price">R$ {{ pedido.total }}</strong>
-            </div>
-          </div>
 
-          <div class="delivery-code-box">
-            <span>Código de Verificação exigido:</span>
-            <strong>3577</strong>
+            
+            
+            <div><br>
+              <span class="label">Total a Receber:</span>
+              <strong class="price">R$ {{ pedido.valorTotal || '0,00' }}</strong>
+            </div>
           </div>
 
           <button class="btn-driver success" (click)="concluirEntrega()">
@@ -62,19 +56,19 @@
         </div>
       }
 
-      @case ('entregues') {
+      @case ('entregue') {
         <div class="driver-empty-state">
           <div class="empty-icon">🎉</div>
           <h3>Nenhuma entrega pendente!</h3>
-          <p>Aguardando novos pedidos serem liberados pela cozinha.</p>
+          <p>Aguardando novos pedidos serem liberados pela loja.</p>
         </div>
       }
 
       @default {
         <div class="driver-empty-state">
           <div class="empty-icon">⏳</div>
-          <h3>Nenhum pedido atribuído</h3>
-          <p>Os pedidos aparecerão aqui assim que forem liberados para a rota.</p>
+          <h3>Aguardando Liberação</h3>
+          <p>O pedido atual ainda está na cozinha.</p>
         </div>
       }
     }

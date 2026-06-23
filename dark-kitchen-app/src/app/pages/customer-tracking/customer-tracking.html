@@ -78,7 +78,7 @@
   <section class="driver-address-container-new">
     <div class="card-driver-new" style="border: 1px solid #E5E7EB; box-shadow: 0 4px 12px rgba(0,0,0,0.05); background: #FFFFFF; border-radius: 12px;">
       <div style="background: #E27E0C; color: #FFFFFF; font-size: 10px; font-weight: 600; text-align: center; padding: 6px 0; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 10px 10px 0 0;">
-        Acompanhamento
+        DADOS DO ENTREGADOR
       </div>
       <div class="driver-body-new" style="padding: 12px;">
         <div class="driver-profile-row" style="display: flex; align-items: center; gap: 10px;">
@@ -94,11 +94,18 @@
         </div>
         <hr style="border: none; border-top: 1px dashed #E5E7EB; margin: 12px 0;" />
         
-        <div class="driver-details-new" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="driver-details-new" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 0;">
           @if (pedidoReal?.motoboy) {
-            <div style="text-align: center; padding: 10px 0;"><span style="font-size: 11px; color: #E27E0C; font-weight: bold;">Motoboy à caminho!</span></div>
+            <span style="font-size: 11px; color: #E27E0C; font-weight: 800; text-transform: uppercase;">Motoboy a caminho!</span>
+            <div style="margin-top: 4px;">
+              <span style="font-size: 10px; color: #4B5563; display: block;">{{ pedidoReal.modeloMoto }}</span>
+              <span style="font-size: 10px; font-weight: 700; color: #111827; display: block; letter-spacing: 0.02em;">{{ pedidoReal.placaMoto }}</span>
+            </div>
           } @else {
-            <div style="text-align: center; padding: 10px 0;"><span style="font-size: 11px; color: #6B7280;">Veículo não atribuído.</span></div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 6px; color: #9CA3AF;">
+              <span style="font-size: 14px;">⏳</span>
+              <span style="font-size: 10px; font-weight: 600;">Aguardando atribuição...</span>
+            </div>
           }
         </div>
       </div>
@@ -114,7 +121,6 @@
             <p style="font-size: 11px; font-weight: 600; color: #6B7280; font-style: italic;">Aguardando dados...</p>
           }
         </div>
-
         <div class="address-edit-form-new" [class.hidden]="!addressEditMode">
           <input type="text" #inputNovoEnd [value]="pedidoReal?.enderecoEntrega" placeholder="Endereço completo" style="width: 100%; margin-bottom: 5px;" />
           <div class="form-actions-new">
@@ -125,9 +131,7 @@
       </div>
 
       @if (getNivelStatus(pedidoReal?.status) < 3) {
-        <button class="card-edit-btn-new" (click)="toggleAddressEdit()" style="border: 1px solid #111827; color: #111827;">
-          Editar Endereço
-        </button>
+        <button class="card-edit-btn-new" (click)="toggleAddressEdit()" style="border: 1px solid #111827; color: #111827;">Editar Endereço</button>
       } @else {
         <div style="text-align: center; background: #F3F4F6; padding: 10px; border-radius: 8px; border: 1px dashed #D1D5DB;">
           <span style="font-size: 9px; color: #6B7280; font-weight: bold; text-transform: uppercase;">Bloqueado: Em Rota/Entregue</span>
@@ -138,9 +142,7 @@
 
   @if (pedidoReal?.status !== 'entregue') {
     <section class="confirm-section-clear">
-      <button class="btn-confirm" #confirmBtn (click)="confirmDelivery(confirmBtn)">
-        Confirmar Entrega
-      </button>
+      <button class="btn-confirm" #confirmBtn (click)="confirmDelivery(confirmBtn)">Confirmar Entrega</button>
     </section>
   }
 
@@ -165,6 +167,21 @@
       <div class="total-row grand"><span>Total</span><span>R$ {{ pedidoReal?.valorTotal || '0,00' }}</span></div>
     </div>
   </section>
+  <section class="section support-section">
+    <h2 class="section-title">Precisa de ajuda?</h2>
+    <div class="support-actions" style="display: flex; gap: 12px; margin-top: 15px;">
+      
+      <button class="btn-support-primary" style="flex: 1; padding: 14px 10px; border-radius: 8px; background: #E27E0C; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 12px; border: none;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        Falar com Entregador
+      </button>
 
-  <section class="section support-section"></section>
+      <button class="btn-support-secondary" style="flex: 1; padding: 14px 10px; border-radius: 8px; background: transparent; color: #E27E0C; border: 2px solid #E27E0C; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Falar com a Loja
+      </button>
+      
+    </div>
+  </section>
+
 </main>

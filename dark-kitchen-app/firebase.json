@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/dark-kitchen-app/browser",
+    "public": "dist/dark-kitchen-app/browser/",
     "ignore": [
       "firebase.json",
       "**/.*",

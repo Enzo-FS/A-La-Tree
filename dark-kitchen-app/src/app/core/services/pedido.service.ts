@@ -28,14 +28,15 @@ export class PedidoService {
    */
   async criarPedido(
     clienteId: string,
-    itens: CartItem[],
+    itens: any[], // 👈 Pode deixar como any[] para aceitar o carrinho completo
     enderecoEntrega: string,
     valorTotal: number,
     formaPagamento: 'entrega' | 'pix'
   ): Promise<string> {
-    const pedido: Omit<PedidoModel, 'id'> = {
+    const pedido = {
       clienteId,
-      itens: cartItemsToData(itens),
+      // 👇 A MÁGICA: Removemos o cartItemsToData! Salvamos o carrinho cru e completo.
+      itens: itens, 
       enderecoEntrega,
       valorTotal,
       formaPagamento,
