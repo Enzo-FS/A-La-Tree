@@ -12,7 +12,7 @@ import { inject } from '@angular/core';
   template: `
     <div class="payment-screen">
       <div class="top-bar">
-        <button class="icon-btn" (click)="irPara('/meus-pedidos')">
+        <button class="icon-btn" (click)="irPara('/home')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
         </button>
         <span class="top-bar-title">Forma de Pagamento</span>
@@ -42,18 +42,18 @@ import { inject } from '@angular/core';
     </div>
   `,
   styles: [`
-    .payment-screen { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
-    .payment-options { padding: 1.5rem 0 7rem; overflow-y: auto; }
+    .payment-screen { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; width: 100%; overflow-x: hidden; box-sizing: border-box; }
+    .payment-options { padding: 1.5rem 0 7rem; overflow-y: auto; width: 100%; box-sizing: border-box; }
     .payment-option { background: var(--white); border-radius: 1rem; padding: 1rem 1.25rem; margin: 0 1.25rem 0.65rem; display: flex; align-items: center; gap: 1rem; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .payment-option.selected { border-color: var(--orange); background: var(--orange-light); }
+    .payment-option.selected { border-color: var(--orange); background: var(--orange-lite); }
     .payment-icon { width: 3rem; height: 3rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: var(--gray-100); flex-shrink: 0; }
-    .payment-option.selected .payment-icon { background: rgba(240,139,25,0.15); }
+    .payment-option.selected .payment-icon { background: rgba(226,126,12,0.15); }
     .payment-text h4 { font-size: 0.88rem; font-weight: 700; color: var(--gray-800); }
     .payment-text p { font-size: 0.75rem; color: var(--gray-500); margin-top: 2px; }
     .payment-radio { margin-left: auto; width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 2px solid var(--gray-200); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .payment-option.selected .payment-radio { border-color: var(--orange); background: var(--orange); }
     .payment-option.selected .payment-radio::after { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: #fff; }
-    .pay-footer { position: fixed; bottom: 0; left: 0; right: 0; max-width: 430px; margin: 0 auto; padding: 1rem 1.25rem 2rem; background: var(--white); border-top: 1px solid #f0f0f0; }
+    .pay-footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; padding: 1rem 1.25rem 2rem; background: var(--white); border-top: 1px solid #f0f0f0; box-sizing: border-box; }
   `],
 })
 export class PaymentComponent {

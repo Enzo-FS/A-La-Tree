@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PedidoService } from '../../../core/services/pedido.service';
 import { AppStateService } from '../../../core/services/app-state.service';
-// import { BottomNavComponent } from '../bottom-nav/bottom-nav.component'; // Descomente se usar a navbar
+import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule], // Adicione o BottomNavComponent aqui se for usar
+  imports: [CommonModule, BottomNavComponent], 
   template: `
     <div class="history-page">
       <header class="history-header">
@@ -16,81 +16,80 @@ import { AppStateService } from '../../../core/services/app-state.service';
         <p>Acompanhe o status e histórico</p>
       </header>
 
-      <div class="orders-list">
-        @if (carregando) {
-          <div class="loading-state">Buscando seus pedidos...</div>
-        } @else if (meusPedidos.length === 0) {
-          <div class="empty-state">
-            <div class="empty-icon">🍽️</div>
-            <p>Você ainda não fez nenhum pedido.</p>
-            <button class="btn-explore" (click)="irPara('/explorar')">Explorar Cardápio</button>
-          </div>
-        } @else {
-          @for (pedido of meusPedidos; track pedido.id) {
-            <div class="order-card" (click)="abrirDetalhes(pedido.id)">
-              
-              <div class="card-top">
-                <span class="order-id">#{{ pedido.id | slice:0:6 }}</span>
-                <span class="order-status" [class.done]="pedido.status === 'entregue'">
-                  {{ traduzirStatus(pedido.status) }}
-                </span>
-              </div>
-              
-              <div class="card-mid">
-                <div class="order-items-preview">
-                  @for (item of pedido.itens | slice:0:2; track $index) {
-                    <p>{{ item.qty || item.quantidade || 1 }}x {{ item.food?.name || item.nome || 'Produto' }}</p>
-                  }
-                  @if (pedido.itens?.length > 2) {
-                    <p class="more-items">+ {{ pedido.itens.length - 2 }} itens</p>
-                  }
-                </div>
-                <div class="order-price">
-                  <span>Total</span>
-                  <strong>R$ {{ pedido.valorTotal || '0,00' }}</strong>
-                </div>
-              </div>
-              
-              <div class="card-bottom">
-                <span>Ver detalhes do pedido ➔</span>
-              </div>
+      <div class="profile-guest-card" *ngIf="state.isGuest()">
+        <h3>Você está como Visitante</h3>
+        <p>Faça login para acompanhar o histórico dos seus pedidos.</p>
+        <button class="btn btn-primary" (click)="irPara('/login')">Fazer Login</button>
+      </div>
 
+      <div class="pedidos-section" *ngIf="!state.isGuest()">
+        <div class="pedidos-header">
+          <span>📦 Histórico de Compras</span>
+          <button class="reload-btn" (click)="carregarPedidos()">↻ Atualizar</button>
+        </div>
+
+        <div *ngIf="carregando" class="pedidos-loading">Buscando seus pedidos...</div>
+
+        <div *ngIf="!carregando && meusPedidos.length === 0" class="pedidos-empty">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🍽️</div>
+          Você ainda não fez nenhum pedido.
+          <br><button class="btn-explore mt-2" (click)="irPara('/explorar')">Explorar Cardápio</button>
+        </div>
+
+        <div class="pedido-item" *ngFor="let p of meusPedidos" (click)="abrirDetalhes(p.id)">
+          <div class="pedido-item-top">
+            <span class="pedido-date">{{ formatarData(p.createdAt) }}</span>
+            <span class="pedido-status" [class]="'status-' + p.status">
+              {{ traduzirStatus(p.status) }}
+            </span>
+          </div>
+          <div class="pedido-item-bottom">
+            <span class="pedido-itens">{{ p.itens?.length ?? 0 }} item(ns)</span>
+            <div class="pedido-price-block">
+              <span class="pedido-total">R$ {{ p.valorTotal }},00</span>
+              <span class="arrow-detail">➔</span>
             </div>
-          }
-        }
+          </div>
+        </div>
       </div>
-      
-      </div>
+
+      <app-bottom-nav active="orders"></app-bottom-nav>
+    </div>
   `,
   styles: [`
-    .history-page { min-height: 100vh; background: var(--bg, #F5F5F7); padding: 2rem 1.5rem 6rem; max-width: 430px; margin: 0 auto; display: flex; flex-direction: column; }
-    .history-header { margin-bottom: 2rem; }
+    .history-page { background: var(--bg, #F5F5F7); min-height: 100dvh; width: 100%; display: flex; flex-direction: column; padding: 2rem 1.5rem 90px; box-sizing: border-box; overflow-x: hidden; }
+    .history-header { margin-bottom: 1.5rem; }
     .history-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text, #1A1A1A); }
     .history-header p { font-size: 0.9rem; color: var(--text-soft, #555); margin-top: 4px; }
     
-    .orders-list { display: flex; flex-direction: column; gap: 1rem; }
+    .profile-guest-card { background: linear-gradient(135deg,#FFF3E0,#FFE8C8); border-radius: 1.25rem; padding: 1.25rem; border: 2px dashed #F08B19; text-align: center; }
+    .profile-guest-card h3 { font-size: 1rem; font-weight: 700; color: var(--orange-dark); margin-bottom: 0.4rem; }
+    .profile-guest-card p { font-size: 0.78rem; color: #7B4A00; margin-bottom: 1rem; }
+    .btn-explore { padding: 0.6rem 1.2rem; background: var(--orange); color: #FFF; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; }
     
-    .order-card { background: var(--card, #FFF); border-radius: 16px; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.03); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-    .order-card:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .pedidos-section { background: var(--white); border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .pedidos-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem 0.5rem; }
+    .pedidos-header span { font-size: 0.85rem; font-weight: 700; color: var(--gray-800); }
+    .reload-btn { background: none; border: none; font-size: 0.75rem; font-weight: 600; color: var(--orange); cursor: pointer; }
+    .pedidos-loading, .pedidos-empty { font-size: 0.85rem; color: var(--gray-400); text-align: center; padding: 2.5rem 1rem; }
     
-    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px dashed #E5E7EB; }
-    .order-id { font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--gray-dark, #6B6B6B); }
-    .order-status { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; background: var(--orange-lite, #FFF3E0); color: var(--orange, #E27E0C); }
-    .order-status.done { background: #DCFCE7; color: #166534; }
+    .pedido-item { padding: 1rem 1.25rem; border-top: 1px solid #f3f3f3; cursor: pointer; transition: background 0.15s; }
+    .pedido-item:active { background: #f9f9f9; }
+    .pedido-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+    .pedido-date { font-size: 0.75rem; color: var(--gray-400); font-weight: 500; }
+    .pedido-status { font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.02em; }
     
-    .card-mid { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; }
-    .order-items-preview p { font-size: 0.85rem; color: var(--text, #1A1A1A); font-weight: 500; line-height: 1.4; }
-    .more-items { color: var(--gray-dark, #6B6B6B) !important; font-size: 0.75rem !important; margin-top: 4px; }
+    .status-recebido { background: #FFF3E0; color: #E65100; }
+    .status-preparando { background: #FFF8E1; color: #F57F17; }
+    .status-saiu_para_entrega { background: #E3F2FD; color: #0D47A1; }
+    .status-entregue { background: #E8F5E9; color: #1B5E20; }
     
-    .order-price { display: flex; flex-direction: column; align-items: flex-end; }
-    .order-price span { font-size: 0.75rem; color: var(--text-soft, #555); }
-    .order-price strong { font-size: 1.1rem; font-weight: 800; color: var(--text, #1A1A1A); }
-    
-    .card-bottom { text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--orange, #E27E0C); }
-    
-    .loading-state, .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-soft, #555); }
-    .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
-    .btn-explore { margin-top: 1.5rem; padding: 0.8rem 1.5rem; background: var(--orange, #E27E0C); color: #FFF; border-radius: 8px; font-weight: 700; }
+    .pedido-item-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .pedido-itens { font-size: 0.8rem; font-weight: 500; color: var(--gray-600); }
+    .pedido-price-block { display: flex; align-items: center; gap: 0.5rem; }
+    .pedido-total { font-size: 1rem; font-weight: 800; color: var(--orange); }
+    .arrow-detail { font-size: 0.8rem; color: var(--orange); opacity: 0.7; }
+    .mt-2 { margin-top: 1rem; }
   `]
 })
 export class OrdersComponent implements OnInit {
@@ -98,14 +97,18 @@ export class OrdersComponent implements OnInit {
   carregando = true;
 
   private pedidoService = inject(PedidoService);
-  private state = inject(AppStateService);
+  public state = inject(AppStateService);
   private router = inject(Router);
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.carregarPedidos();
+  }
+
+  async carregarPedidos() {
+    this.carregando = true;
     const user = this.state.user();
-    if (user?.id) {
+    if (user && user.id) {
       try {
-        // Busca os pedidos e inverte para o mais recente ficar no topo da lista
         const pedidos = await this.pedidoService.buscarPedidosPorUsuario(user.id);
         this.meusPedidos = pedidos.reverse();
       } catch (error) {
@@ -113,6 +116,13 @@ export class OrdersComponent implements OnInit {
       }
     }
     this.carregando = false;
+  }
+
+  formatarData(timestamp: any): string {
+    if (!timestamp) return 'Data não disponível';
+    // Se o Firebase retornou um Timestamp, converte para Date
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
   traduzirStatus(status: string): string {
@@ -123,7 +133,6 @@ export class OrdersComponent implements OnInit {
     return status;
   }
 
-  // 👇 AQUI ESTÁ A MÁGICA DE NAVEGAÇÃO
   abrirDetalhes(pedidoId: string) {
     this.router.navigate(['/pedido', pedidoId]);
   }

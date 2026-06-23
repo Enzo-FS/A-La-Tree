@@ -263,7 +263,23 @@ export class AppStateService {
   }
 
   closeDayModal(): void { this.dayModalOpen.set(false); }
+
+  logout() {
+    // 1. Remove os dados do usuário da memória
+    this.user.set(null); 
+    
+    // 2. Tira o status de visitante (se ele for um)
+    this.isGuest.set(false); 
+    
+    // 3. Esvazia o carrinho para o próximo usuário não ver os itens
+    this.cart.set([]); 
+    
+    // 4. Se o seu AuthService tiver uma função de logout real do Firebase, 
+    // basta descomentar a linha abaixo no futuro:
+    // this.authService.logout();
+  }
 }
+
 
 /*import { Injectable, signal, computed, inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';

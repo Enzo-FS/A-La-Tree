@@ -11,6 +11,13 @@ import { inject } from '@angular/core';
   imports: [FormsModule, CommonModule],
   template: `
     <div class="login-screen">
+    <div class="top-bar">
+        <button class="icon-btn" (click)="irPara('/home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        </button>
+        <span class="top-bar-title">Cardápio Completo</span>
+        <div style="width:2.2rem"></div>
+      </div>
       <div class="login-hero">
         <div class="login-hero-emoji">🍽️🍻</div>
         <div class="login-icon-box">🔐</div>

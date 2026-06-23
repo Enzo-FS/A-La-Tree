@@ -8,7 +8,7 @@ import { AppStateService } from '../../../core/services/app-state.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="bottom-nav floating-bottom-nav">
+    <div class="floating-bottom-nav">
       
       <div class="nav-item" [class.active]="active === 'home'" (click)="irPara('/home')">
         <div class="icon-space">
@@ -25,14 +25,19 @@ import { AppStateService } from '../../../core/services/app-state.service';
       </div>
 
       <div class="nav-item center-nav">
-        <button type="button" class="nav-center-btn" (click)="irPara('/meus-pedidos')">
+        <button type="button" class="nav-center-btn" (click)="acaoBotaoCentral()">
           🍽️ 
+          @if (state.cart().length > 0) {
+            <span class="cart-badge">{{ state.cart().length }}</span>
+          }
         </button>
       </div>
 
-      <div class="nav-item" style="visibility: hidden;">
-        <div class="icon-space"></div>
-        <span class="nav-label">Vazio</span>
+      <div class="nav-item" [class.active]="active === 'orders'" (click)="irPara('/meus-pedidos')">
+        <div class="icon-space">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </div>
+        <span class="nav-label">Pedidos</span>
       </div>
 
       <div class="nav-item" [class.active]="active === 'profile'" (click)="irPara(state.user() ? '/perfil' : '/login')">
@@ -54,5 +59,14 @@ export class BottomNavComponent {
   irPara(rota: string) {
     if (!rota) return;
     this.router.navigate([rota]);
+  }
+
+  // Lógica da Trava do Carrinho Vazio
+  acaoBotaoCentral() {
+    if (this.state.cart().length > 0) {
+      this.irPara('/pagamento');
+    } else {
+      alert('Nenhum item adicionado no momento.');
+    }
   }
 }

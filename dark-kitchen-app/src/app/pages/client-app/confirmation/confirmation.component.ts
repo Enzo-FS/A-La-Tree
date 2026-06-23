@@ -60,8 +60,9 @@ import { inject } from '@angular/core'; // Adicione se o inject ainda não estiv
     </div>
   `,
   styles: [`
-    .confirm-screen { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
-    .confirm-content { padding: 1rem 0 8rem; overflow-y: auto; }
+    /* Travas adicionadas na screen e no footer */
+    .confirm-screen { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; width: 100%; overflow-x: hidden; box-sizing: border-box; }
+    .confirm-content { padding: 1rem 0 8rem; overflow-y: auto; width: 100%; box-sizing: border-box; }
     .confirm-section { background: var(--white); border-radius: 1rem; margin: 0 1.25rem 0.65rem; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     .confirm-section-title { font-size: 0.75rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.85rem 1rem 0.4rem; }
     .confirm-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1rem; border-top: 1px solid #f3f3f3; }
@@ -73,7 +74,7 @@ import { inject } from '@angular/core'; // Adicione se o inject ainda não estiv
     .confirm-row span:first-child { font-size: 0.82rem; color: var(--gray-500); }
     .confirm-row span:last-child { font-size: 0.82rem; font-weight: 600; color: var(--gray-800); }
     .confirm-row.total span:last-child { font-size: 0.95rem; color: var(--orange); }
-    .confirm-footer { position: fixed; bottom: 0; left: 0; right: 0; max-width: 430px; margin: 0 auto; padding: 1rem 1.25rem 2rem; background: var(--white); border-top: 1px solid #f0f0f0; z-index: 45; }
+    .confirm-footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; padding: 1rem 1.25rem 2rem; background: var(--white); border-top: 1px solid #f0f0f0; z-index: 45; box-sizing: border-box; }
   `],
 })
 export class ConfirmationComponent {
